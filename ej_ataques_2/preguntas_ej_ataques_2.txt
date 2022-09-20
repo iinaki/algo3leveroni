@@ -1,5 +1,5 @@
 1) Pensamos que agregar el mensaje #noEstaHerido teniendo #estaHerido es un poco redundante, ya que ya hay una forma de obtener la información de si el personaje está herido o no usando el mensaje not.
 
-2) a
+2) djdjjdjd
 
 3) Para modelar el resultado del combate lo que pensamos fue guardar como colaboradores internos cuales combatientes están vivos de cada bando, estos son collections que se van actualizando en cada ronda. Al llegar al final de la batalla se realiza el cálculo de resultado, si ninguna de las collections está vacía se informa que el resultado es indeterminado, y luego si alguna lo está y la otra no, significa que el otro bando es el ganador. Para devolver el resultado lo que nos surgió al principio fue usar números: 0 para indeterminado, 1 para el bando 1, y -1 para el bando 2, más tarde nos dimos cuenta que no se entendía bien qué querían decir los números y los cambiamos por mensajes de texto que resultaron mucho más claros. 
