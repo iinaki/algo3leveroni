@@ -6,7 +6,7 @@ Para sacar el codigo repetido de los test 1 y 2 creamos un mensaje llamado #ejec
 2) Cómo representar en Smalltalk
 ¿Cuáles son las formas en que podemos representar entes de la realidad en Smalltalk que conocés? Es decir, ¿qué cosas del lenguaje Smalltalk puedo usar para representar entidades de la realidad?
 
-
+El principal objetivo del uso de Smalltalk es que permite modelar entidades de la realidad, a estos se les llama objetos y estos a su vez responden a mensajes que definen su comportamiento. Vimos en clase dos paradigmas que nos ayudan a organizar el comportamiento de los objetos: el Paradigma Moderno y el Paradigma Clásico.
 
 3) Teoría de Naur
 ¿Qué relación hay entre sacar código repetido (creando abstracciones) y la teoría del modelo/sistema (del paper de Naur)?
