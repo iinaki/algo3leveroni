@@ -12,4 +12,4 @@ El principal objetivo del uso de Smalltalk es que permite modelar entidades de l
 ¿Qué relación hay entre sacar código repetido (creando abstracciones) y la teoría del modelo/sistema (del paper de Naur)?
 
 En esencia lo que el paper quiere transmitir es que todo programa es un modelo que representa parte de la realidad, entonces, el codigo debe ser claro, intuitivo y legible. De esta forma garantizamos de que el programa perdure en el tiempo y se le puedan realizar modificaciones de una manera mas sencilla.
-Es por esto, que existe una relación entre sacar código repetido y el paper, ya que cuando sacamos código repetido estamos haciendo el programa mas legible e intuitivo por medio de estas abstracciones que generamos. 
+Es por esto, que existe una relación entre sacar código repetido y el paper, ya que cuando sacamos código repetido estamos haciendo el programa mas legible e intuitivo por medio de estas abstracciones que generamos. Lo importante esta en que estamos modificando el código sin cambiar el funcionamiento del mismo, de una forma mas clara.
