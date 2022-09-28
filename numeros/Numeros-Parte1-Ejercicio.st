@@ -135,42 +135,22 @@ Object subclass: #Numero
 	poolDictionaries: ''
 	category: 'Numeros-Parte1-Ejercicio'!
 
-!Numero methodsFor: 'arithmetic operations' stamp: 'i 9/28/2022 13:12:47'!
+!Numero methodsFor: 'arithmetic operations' stamp: 'M 9/28/2022 18:36:50'!
 * aMultiplier 
 
-	(type = #Entero and: [aMultiplier type = #Entero]) ifTrue:	
-		[ ^self class with: value * aMultiplier integerValue ].
-		
-	(type = #Fraccion and: [aMultiplier type = #Fraccion]) ifTrue:
-		[ ^self class with: (numerator * aMultiplier numerator) over: (denominator * aMultiplier denominator) ].
-		
-	self error: 'Tipo de número no soportado'
+	self subclassResponsibility.
 	! !
 
-!Numero methodsFor: 'arithmetic operations' stamp: 'i 9/28/2022 13:12:47'!
+!Numero methodsFor: 'arithmetic operations' stamp: 'M 9/28/2022 18:45:40'!
 + anAdder 
 	
-	(type = #Entero and: [anAdder type = #Entero]) ifTrue:
-		[ ^self class with: value + anAdder integerValue ].
-	
-	(type = #Fraccion and: [anAdder type = #Fraccion]) ifTrue:
-		[ | newNumerator newDenominator |
-		
-		newNumerator := (numerator * anAdder denominator) + (denominator * anAdder numerator).
-		newDenominator := denominator * anAdder denominator.
-		
-		^ self class with: newNumerator over: newDenominator ].
-	
-	self error: 'Tipo de número no soportado'
+	self subclassResponsibility.
 	! !
 
-!Numero methodsFor: 'arithmetic operations' stamp: 'i 9/28/2022 13:12:47'!
+!Numero methodsFor: 'arithmetic operations' stamp: 'M 9/28/2022 18:51:30'!
 negated
 	
-	type = #Entero ifTrue:
-		[ ^self * (self class with: -1) ].
-	type = #Fraccion ifTrue:
-		[ ^self class with: numerator * (self class with: -1) over: denominator ].! !
+	self subclassResponsibility.! !
 
 
 !Numero methodsFor: 'testing' stamp: 'i 9/28/2022 13:17:18'!
@@ -330,6 +310,23 @@ Numero subclass: #Entero
 	poolDictionaries: ''
 	category: 'Numeros-Parte1-Ejercicio'!
 
+!Entero methodsFor: 'as yet unclassified' stamp: 'M 9/28/2022 18:35:24'!
+* aMultiplier
+
+	(aMultiplier type = #Entero) ifTrue:	
+		[ ^self class with: value * aMultiplier integerValue ].
+	
+	self error: 'Tipo de número no soportado'.! !
+
+!Entero methodsFor: 'as yet unclassified' stamp: 'M 9/28/2022 18:44:43'!
++ anAdder
+
+	(anAdder type = #Entero) ifTrue:
+		[ ^self class with: value + anAdder integerValue. ].
+		
+	self error: 'Tipo de número no soportado'
+	! !
+
 !Entero methodsFor: 'as yet unclassified' stamp: 'i 9/28/2022 13:16:18'!
 isNegative
 	
@@ -343,6 +340,11 @@ isOne
 isZero
 	^value = 0! !
 
+!Entero methodsFor: 'as yet unclassified' stamp: 'M 9/28/2022 18:54:52'!
+negated
+	
+		^self * (self class with: -1).! !
+
 
 !classDefinition: #Fraccion category: 'Numeros-Parte1-Ejercicio'!
 Numero subclass: #Fraccion
@@ -350,6 +352,28 @@ Numero subclass: #Fraccion
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Numeros-Parte1-Ejercicio'!
+
+!Fraccion methodsFor: 'as yet unclassified' stamp: 'M 9/28/2022 18:35:09'!
+* aMultiplier
+
+	
+	(aMultiplier type = #Fraccion) ifTrue:	 [  ^self class with: (numerator * aMultiplier numerator) over: (denominator * 	aMultiplier denominator)].
+		
+	self error: 'Tipo de número no soportado'
+! !
+
+!Fraccion methodsFor: 'as yet unclassified' stamp: 'M 9/28/2022 18:46:53'!
++ anAdder
+		
+	(anAdder type = #Fraccion) ifTrue:
+	[ | newNumerator newDenominator |
+	
+	newNumerator := (numerator * anAdder denominator) + (denominator * anAdder numerator).
+	newDenominator := denominator * anAdder denominator.
+	
+	^ self class with: newNumerator over: newDenominator ].
+	
+	self error: 'Tipo de número no soportado'! !
 
 !Fraccion methodsFor: 'as yet unclassified' stamp: 'i 9/28/2022 13:16:32'!
 isNegative
@@ -364,6 +388,11 @@ isOne
 isZero
 	^false! !
 
+!Fraccion methodsFor: 'as yet unclassified' stamp: 'M 9/28/2022 18:54:45'!
+negated
+
+		^self class with: numerator * (self class with: -1) over: denominator.! !
+
 
 !classDefinition: #ZZZ category: 'Numeros-Parte1-Ejercicio'!
 Object subclass: #ZZZ
@@ -371,3 +400,43 @@ Object subclass: #ZZZ
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Numeros-Parte1-Ejercicio'!
+
+
+!classDefinition: #AAA category: 'Numeros-Parte1-Ejercicio'!
+ZZZ subclass: #AAA
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numeros-Parte1-Ejercicio'!
+
+!AAA methodsFor: 'as yet unclassified' stamp: 'M 9/28/2022 18:44:14'!
++ anAdder
+
+	 | valor |
+	
+	(anAdder type = #Entero) ifTrue:
+		[ ^self class with: valor + anAdder integerValue. ].
+		
+	self error: 'Tipo de número no soportado'
+	! !
+
+
+!classDefinition: #BBB category: 'Numeros-Parte1-Ejercicio'!
+ZZZ subclass: #BBB
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Numeros-Parte1-Ejercicio'!
+
+!BBB methodsFor: 'as yet unclassified' stamp: 'M 9/28/2022 18:43:52'!
++ anAdder
+		
+	(anAdder type = #Fraccion) ifTrue:
+	[ | newNumerator newDenominator denominador numerador |
+	
+	newNumerator := (numerador * anAdder denominator) + (denominador * anAdder numerator).
+	newDenominator := denominador * anAdder denominator.
+	
+	^ self class with: newNumerator over: newDenominator ].
+	
+	self error: 'Tipo de número no soportado'! !
