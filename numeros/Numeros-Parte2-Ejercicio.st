@@ -398,14 +398,15 @@ Numero subclass: #Entero
 	
 ! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'M 9/28/2022 23:10:28'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'i 9/28/2022 23:31:45'!
 - aSubtrahend 
-	
 	aSubtrahend class = self class ifTrue: [
 		^ self class with: value - aSubtrahend integerValue.
 	].
-	
-	^self + (	Fraccion with: (aSubtrahend numerator negated) over: aSubtrahend denominator).! !
+		aSubtrahend class = Fraccion ifTrue: [
+		^self + (	Fraccion with: (aSubtrahend numerator negated) over: aSubtrahend denominator).
+	].
+	! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'M 9/28/2022 22:39:36'!
 / aDivisor 
@@ -522,10 +523,10 @@ Numero subclass: #Fraccion
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'i 9/28/2022 21:23:55'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'i 9/28/2022 23:28:59'!
 * aMultiplier 
 	| numeradorNuevo denominadorNuevo |
-	
+		
 	aMultiplier class = self class ifTrue: [
 		^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator).
 	].
@@ -556,7 +557,7 @@ Numero subclass: #Fraccion
 		^(Entero with: newNumerator )/(Entero with: newDenominator ).
 		].! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 9/28/2022 23:23:08'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'i 9/28/2022 23:30:14'!
 - aSubtrahend 
 	
 	| newNumerator newDenominator |
@@ -567,11 +568,13 @@ Numero subclass: #Fraccion
 	
 		^newNumerator / newDenominator 
 	].
+		aSubtrahend class = Entero ifTrue: [
+		^self + (	Entero with: aSubtrahend negated integerValue).
+	].
 	
-	^self + (	Entero with: aSubtrahend negated integerValue).
 ! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 9/28/2022 22:44:48'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'i 9/28/2022 23:30:37'!
 / aDivisor 
 	
 	| numeradorNuevo denominadorNuevo |
@@ -580,7 +583,6 @@ Numero subclass: #Fraccion
 		^(numerator * aDivisor denominator) / (denominator * aDivisor numerator).
 	].
 
-		
 	aDivisor class = Entero ifTrue: [
 		numeradorNuevo := numerator integerValue.
 		denominadorNuevo := denominator integerValue * aDivisor integerValue.
