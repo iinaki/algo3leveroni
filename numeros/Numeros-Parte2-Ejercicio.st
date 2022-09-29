@@ -398,15 +398,31 @@ Numero subclass: #Entero
 	
 ! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'NR 9/23/2018 23:40:37'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'M 9/28/2022 23:10:28'!
 - aSubtrahend 
 	
-	^ self class with: value - aSubtrahend integerValue.! !
+	aSubtrahend class = self class ifTrue: [
+		^ self class with: value - aSubtrahend integerValue.
+	].
+	
+	^self + (	Fraccion with: (aSubtrahend numerator negated) over: aSubtrahend denominator).! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 23:14'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'M 9/28/2022 22:39:36'!
 / aDivisor 
 	
-	^Fraccion with: self over: aDivisor! !
+	| numeradorNuevo denominadorNuevo |
+	
+	
+	aDivisor class = self class ifTrue: [
+		^Fraccion with: self over: aDivisor.
+	].
+	
+	aDivisor class = Fraccion ifTrue: [
+		numeradorNuevo := self integerValue * aDivisor denominator integerValue.
+		denominadorNuevo := aDivisor numerator integerValue.
+		
+		^(Entero with: numeradorNuevo )/(Entero with: denominadorNuevo ).
+	].! !
 
 !Entero methodsFor: 'arithmetic operations' stamp: 'HAW 9/24/2018 08:47:50'!
 fibonacci
@@ -540,21 +556,37 @@ Numero subclass: #Fraccion
 		^(Entero with: newNumerator )/(Entero with: newDenominator ).
 		].! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'NR 9/23/2018 23:43:50'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 9/28/2022 23:23:08'!
 - aSubtrahend 
 	
 	| newNumerator newDenominator |
 	
-	newNumerator := (numerator * aSubtrahend denominator) - (denominator * aSubtrahend numerator).
+	aSubtrahend class = self class ifTrue: [
+		newNumerator := (numerator * aSubtrahend denominator) - (denominator * aSubtrahend numerator).
 	newDenominator := denominator * aSubtrahend denominator.
 	
-	^newNumerator / newDenominator 
+		^newNumerator / newDenominator 
+	].
+	
+	^self + (	Entero with: aSubtrahend negated integerValue).
 ! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'HernanWilkinson 5/7/2016 23:14'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 9/28/2022 22:44:48'!
 / aDivisor 
 	
-	^(numerator * aDivisor denominator) / (denominator * aDivisor numerator)! !
+	| numeradorNuevo denominadorNuevo |
+	
+	aDivisor class = self class ifTrue: [
+		^(numerator * aDivisor denominator) / (denominator * aDivisor numerator).
+	].
+
+		
+	aDivisor class = Entero ifTrue: [
+		numeradorNuevo := numerator integerValue.
+		denominadorNuevo := denominator integerValue * aDivisor integerValue.
+		
+		^(Entero with: numeradorNuevo )/(Entero with: denominadorNuevo ).
+	].! !
 
 
 !Fraccion methodsFor: 'comparing' stamp: 'HernanWilkinson 5/7/2016 20:42'!
