@@ -557,8 +557,8 @@ Numero subclass: #Entero
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Entero methodsFor: 'arithmetic - dd' stamp: 'M 10/2/2022 15:36:45'!
-dividir: aDividend
+!Entero methodsFor: 'arithmetic - dd' stamp: 'M 10/2/2022 15:57:33'!
+divideA: aDividend
 
 	^aDividend dividirEntero: self.! !
 
@@ -576,6 +576,11 @@ dividirFraccion: aDivisor
 	denominadorNuevo := aDivisor numerator integerValue.
 		
 	^(Entero with: numeradorNuevo )/(Entero with: denominadorNuevo ).! !
+
+!Entero methodsFor: 'arithmetic - dd' stamp: 'M 10/2/2022 15:55:55'!
+leRestaA: minuendo
+
+	^minuendo restarEntero: self.! !
 
 !Entero methodsFor: 'arithmetic - dd' stamp: 'i 9/30/2022 19:05:07'!
 multiplicar: multiplicador
@@ -596,11 +601,6 @@ multiplicarFraccion: aMultiplier
 	denominadorNuevo := aMultiplier denominator integerValue.
 		
 	^(Entero with: numeradorNuevo )/(Entero with: denominadorNuevo).! !
-
-!Entero methodsFor: 'arithmetic - dd' stamp: 'M 10/2/2022 15:19:51'!
-restar: minuendo
-
-	^minuendo restarEntero: self.! !
 
 !Entero methodsFor: 'arithmetic - dd' stamp: 'M 10/2/2022 15:19:43'!
 restarEntero: aSubtrahend
@@ -652,27 +652,24 @@ negated
 	
 ! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'M 10/2/2022 15:19:58'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'M 10/2/2022 15:55:56'!
 - aSubtrahend 
 
-	^aSubtrahend restar: self.! !
+	^aSubtrahend leRestaA: self.! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'M 10/2/2022 15:34:36'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'M 10/2/2022 15:57:33'!
 / aDivisor
 
-	^aDivisor dividir: self.! !
+	^aDivisor divideA: self.! !
 
-!Entero methodsFor: 'arithmetic operations' stamp: 'HAW 9/24/2018 08:47:50'!
+!Entero methodsFor: 'arithmetic operations' stamp: 'M 10/2/2022 15:58:17'!
 fibonacci
 
 	| one two |
-	
 	one := Entero with: 1.
 	two := Entero with: 2.
-	
 	self isNegative ifTrue: [self error: Entero negativeFibonacciErrorDescription ].	
 	(self isZero or: [self isOne]) ifTrue: [^one].
-	
 	^ (self - one) fibonacci + (self - two) fibonacci
 		! !
 
@@ -771,8 +768,8 @@ numerator
 	^ numerator! !
 
 
-!Fraccion methodsFor: 'arithmetic - dd' stamp: 'M 10/2/2022 15:32:12'!
-dividir:  dividend 
+!Fraccion methodsFor: 'arithmetic - dd' stamp: 'M 10/2/2022 15:57:33'!
+divideA:  dividend 
 
 	^dividend dividirFraccion: self.
 
@@ -793,6 +790,11 @@ dividirFraccion: aDivisor
 
 	^(numerator * aDivisor denominator) / (denominator * aDivisor numerator).! !
 
+!Fraccion methodsFor: 'arithmetic - dd' stamp: 'M 10/2/2022 15:55:55'!
+leRestaA: minuendo
+
+	^minuendo restarFraccion: self.! !
+
 !Fraccion methodsFor: 'arithmetic - dd' stamp: 'i 9/30/2022 19:04:45'!
 multiplicar: multiplicador
 
@@ -812,11 +814,6 @@ multiplicarEntero: aMultiplier
 multiplicarFraccion: aMultiplier
 
 	^(numerator * aMultiplier numerator) / (denominator * aMultiplier denominator).! !
-
-!Fraccion methodsFor: 'arithmetic - dd' stamp: 'M 10/2/2022 15:25:40'!
-restar: minuendo
-
-	^minuendo restarFraccion: self.! !
 
 !Fraccion methodsFor: 'arithmetic - dd' stamp: 'M 10/2/2022 15:25:11'!
 restarEntero: aSubtrahend
@@ -872,15 +869,15 @@ sumarFraccion: anAdder
 	
 	! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 10/2/2022 15:26:24'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 10/2/2022 15:55:56'!
 - aSubtrahend 
 
-	^aSubtrahend restar: self.! !
+	^aSubtrahend leRestaA: self.! !
 
-!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 10/2/2022 15:27:33'!
+!Fraccion methodsFor: 'arithmetic operations' stamp: 'M 10/2/2022 15:57:33'!
 / aDivisor 
 
-	^aDivisor dividir: self! !
+	^aDivisor divideA: self! !
 
 
 !Fraccion methodsFor: 'as yet unclassified' stamp: 'M 9/28/2022 18:54:45'!
