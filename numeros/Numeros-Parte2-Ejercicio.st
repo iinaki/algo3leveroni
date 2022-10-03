@@ -754,7 +754,7 @@ Entero subclass: #Cero
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Cero methodsFor: 'as yet unclassified' stamp: 'i 10/2/2022 18:04:23'!
+!Cero methodsFor: 'arithmetic' stamp: 'i 10/2/2022 18:04:23'!
 fibonacci
 	| one |
 	
@@ -781,7 +781,7 @@ Entero subclass: #Negativo
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Negativo methodsFor: 'as yet unclassified' stamp: 'i 10/2/2022 18:04:24'!
+!Negativo methodsFor: 'arithmetic' stamp: 'i 10/2/2022 18:04:24'!
 fibonacci
 
 	self error: Entero negativeFibonacciErrorDescription
@@ -805,7 +805,7 @@ Entero subclass: #PositivoMayorAUno
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!PositivoMayorAUno methodsFor: 'as yet unclassified' stamp: 'i 10/2/2022 18:09:49'!
+!PositivoMayorAUno methodsFor: 'arithmetic' stamp: 'i 10/2/2022 18:09:49'!
 fibonacci
 	| one two |
 	
@@ -833,7 +833,7 @@ Entero subclass: #Uno
 	poolDictionaries: ''
 	category: 'Numeros-Parte2-Ejercicio'!
 
-!Uno methodsFor: 'as yet unclassified' stamp: 'i 10/2/2022 18:04:24'!
+!Uno methodsFor: 'arithmetic' stamp: 'i 10/2/2022 18:04:24'!
 fibonacci
 	| one |
 	
