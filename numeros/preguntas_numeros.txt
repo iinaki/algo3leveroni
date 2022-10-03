@@ -14,3 +14,6 @@ El mensaje de self subclassResponsibility en la superclase no aporta una funcion
 
 5) No rompas
 ¿Por qué está mal/qué problemas trae romper encapsulamiento?
+
+Podemos decir que encapsulamiento es una forma de ocultación de información entre entidades, mostrándose entre ellas solo la información más necesaria.
+La no encapsulación no garantiza la integridad de los datos contenidos en el objeto. Por lo tanto, si queremos proteger la información contra modificaciones inesperadas, debemos recurrir al encapsulamiento. A su vez, el encapsulamiento nos brinda un modelo más claro, ya que los objetos responden a sus necesidades y no más allá.
