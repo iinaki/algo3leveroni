@@ -1,11 +1,17 @@
 1) Aporte de los mensajes de DD
 En un double dispatch (DD), ¿qué información aporta cada uno de los dos llamados?
 
+El primer llamado aporta la información del tipo de número que representa el parámetro ( + anAdder por ejemplo), porque según el tipo de número que sea (fracción o entero) responderá a un mensaje polimórfico de una clase. El segundo llamado indica el tipo de número que representa el objeto que recibe el mensaje inicial. Por ejemplo: 1 + 3, el primer llamado nos aporta información del “3” y el segundo llamado información del “1”.
+
 2) Lógica de instanciado
 Con lo que vieron y saben hasta ahora, ¿donde les parece mejor tener la lógica de cómo instanciar un objeto? ¿por qué? ¿Y si se crea ese objeto desde diferentes lugares y de diferentes formas? ¿cómo lo resuelven?
 
+Los objetos pueden responder a mensajes de instancia y mensajes de clase, en estos últimos es donde se debe hacer la inicialización porque para poder instanciar un objeto primero se tiene que poder hablar con la clase del mismo. Se pueden instanciar de manera diferente según las necesidades de cada uno, generalmente se usan los mensajes #new o #with: para esto. Haciendo el ejercicio de fibonacci nos mezclamos un poco con los conceptos y llegamos a unos mensajes de clase que eran un poco confusos, porque logramos hacer lo que queríamos pero para esto nunca instanciamos las subclases que creamos. Hacíamos que según el tipo de número que sea la subclase, la superclase respondía de una manera. Más tarde nos dimos cuenta que no era tarea de la clase hacer esto sino que lo tenía que hacer las instancias, y cambiamos un poco el modelo y las inicializaciones para que sea más claro.
+
 3) Nombres de las categorías de métodos
 Con lo que vieron y trabajaron hasta ahora, ¿qué criterio están usando para categorizar métodos?
+
+Por ahora el único criterio que venimos usando es el de categorizar según si el método es público o privado, es decir si el método lo va a usar alguien externo, o si solamente se usa internamente en la implementación. Por ejemplo en el ejercicio de números, todos los mensajes que tienen que ver con Double Dispatch los categorizamos en una categoría aparte que se llama “arithmetic - dd”, para marcar que estos métodos son privados y de DD.
 
 4) Subclass Responsibility
 Si todas las subclases saben responder un mismo mensaje, ¿por qué ponemos ese mensaje sólo con un “self subclassResponsibility” en la superclase? ¿para qué sirve?
