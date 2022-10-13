@@ -142,48 +142,237 @@ TestCase subclass: #SentenceFinderByPrefixTest
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 21:10:01'!
+test01
+
+	| stack finder |
+	
+	stack := OOStack new.
+	
+	stack push: 'holaa'.
+	stack push: 'chauu'.
+	stack push: 'nashei'.
+	stack push: 'coscu'.
+	stack push: 'cosculluela'.
+	
+	finder := SentenceFinderByPrefix with: stack.
+	
+	stack := OOStack new.
+	self
+		should: [ finder find: '' ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: SentenceFinderByPrefix prefixEmptyErrorDescription equals: anError messageText ]
+	
+	! !
+
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 21:14:01'!
+test01APrefixEmptyReturnAnError
+
+	| stack finder |
+	
+	stack := OOStack new.
+	
+	stack push: 'holaa'.
+	stack push: 'chauu'.
+	stack push: 'nashei'.
+	stack push: 'coscu'.
+	stack push: 'cosculluela'.
+	
+	finder := SentenceFinderByPrefix with: stack.
+	
+	stack := OOStack new.
+	self
+		should: [ finder find: '' ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: SentenceFinderByPrefix prefixEmptyErrorDescription equals: anError messageText ].
+	
+	! !
+
+!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 21:15:16'!
+test02
+
+	| stack finder |
+	
+	stack := OOStack new.
+	
+	stack push: 'holaa'.
+	stack push: 'chauu'.
+	stack push: 'nashei'.
+	stack push: 'coscu'.
+	stack push: 'cosculluela'.
+	
+	finder := SentenceFinderByPrefix with: stack.
+	
+	stack := OOStack new.
+	self
+		should: [ finder find: 'iiiiiiiiiii     holaa' ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: SentenceFinderByPrefix prefixEmptyErrorDescription equals: anError messageText ]
+	
+	! !
+
 
-!classDefinition: #OOStack category: 'Stack-Exercise'!
-Object subclass: #OOStack
-	instanceVariableNames: 'pila'
+!classDefinition: #Estado category: 'Stack-Exercise'!
+Object subclass: #Estado
+	instanceVariableNames: ''
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'private' stamp: 'i 10/9/2022 16:30:34'!
-chequeoDePilaVacia
-	pila isEmpty ifTrue:[self signalPilaEstaVacia ].! !
+!Estado methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 22:19:37'!
+eliminarTope: unStack
 
-!OOStack methodsFor: 'private' stamp: 'i 10/9/2022 15:31:43'!
+	self subclassResponsibility.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Estado class' category: 'Stack-Exercise'!
+Estado class
+	instanceVariableNames: ''!
+
+!Estado class methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 21:56:59'!
+for: unStack
+
+	| subclaseDetectada |
+	
+	subclaseDetectada := Estado subclasses detect: [:EstadoSubclass | (EstadoSubclass correspondeAClase: unStack)].
+	
+	^subclaseDetectada new! !
+
+
+!classDefinition: #HayElementosEnLaPila category: 'Stack-Exercise'!
+Estado subclass: #HayElementosEnLaPila
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!HayElementosEnLaPila methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 22:32:04'!
+devolverTope: unStack
+	
+	^unStack topCuandoHayElementos.! !
+
+!HayElementosEnLaPila methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 22:31:17'!
+eliminarTope: unStack
+
+	^unStack popCuandoHayElementos! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'HayElementosEnLaPila class' category: 'Stack-Exercise'!
+HayElementosEnLaPila class
+	instanceVariableNames: ''!
+
+!HayElementosEnLaPila class methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 21:58:17'!
+correspondeAClase: unStack
+
+	^unStack isEmpty not.
+	! !
+
+
+!classDefinition: #NoHayElementosEnLaPila category: 'Stack-Exercise'!
+Estado subclass: #NoHayElementosEnLaPila
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!NoHayElementosEnLaPila methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 22:07:11'!
+devolverTope: unStack
+
+	^unStack topCuandoNoHayElementos.! !
+
+!NoHayElementosEnLaPila methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 22:33:53'!
+eliminarTope: unStack
+
+	^unStack popCuandoNoHayElementos.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'NoHayElementosEnLaPila class' category: 'Stack-Exercise'!
+NoHayElementosEnLaPila class
+	instanceVariableNames: ''!
+
+!NoHayElementosEnLaPila class methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 21:58:29'!
+correspondeAClase: unStack
+
+	^unStack isEmpty.
+	! !
+
+
+!classDefinition: #OOStack category: 'Stack-Exercise'!
+Object subclass: #OOStack
+	instanceVariableNames: 'pila status'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!OOStack methodsFor: 'private' stamp: 't 10/12/2022 22:29:28'!
+cambiarEstado
+
+	status := Estado for: self.! !
+
+!OOStack methodsFor: 'private' stamp: 't 10/12/2022 22:02:35'!
 initialize
-	pila := OrderedCollection new! !
+	pila := OrderedCollection new.
+	status :=  	Estado for: self.! !
+
+!OOStack methodsFor: 'private' stamp: 't 10/12/2022 22:35:46'!
+popCuandoHayElementos
+
+	| elementoADevolver |
+	
+	elementoADevolver := pila removeLast.
+	
+	self cambiarEstado.
+	
+	^elementoADevolver. ! !
+
+!OOStack methodsFor: 'private' stamp: 't 10/12/2022 22:33:53'!
+popCuandoNoHayElementos
+
+	^self signalPilaEstaVacia.! !
 
 !OOStack methodsFor: 'private' stamp: 'i 10/9/2022 15:42:28'!
 signalPilaEstaVacia
 	self error: self class stackEmptyErrorDescription ! !
+
+!OOStack methodsFor: 'private' stamp: 't 10/12/2022 22:32:04'!
+topCuandoHayElementos
+
+	^pila last.! !
+
+!OOStack methodsFor: 'private' stamp: 't 10/12/2022 22:09:06'!
+topCuandoNoHayElementos
+
+	^self signalPilaEstaVacia.! !
 
 
 !OOStack methodsFor: 'comportamiento de stack' stamp: 'i 10/9/2022 15:32:00'!
 isEmpty
 	^ pila isEmpty.! !
 
-!OOStack methodsFor: 'comportamiento de stack' stamp: 'i 10/9/2022 16:30:12'!
+!OOStack methodsFor: 'comportamiento de stack' stamp: 't 10/12/2022 22:19:37'!
 pop
-	self chequeoDePilaVacia.
-	^pila removeLast.! !
+	^status eliminarTope: self.! !
 
-!OOStack methodsFor: 'comportamiento de stack' stamp: 'i 10/9/2022 15:33:12'!
+!OOStack methodsFor: 'comportamiento de stack' stamp: 't 10/12/2022 22:29:09'!
 push: elementoAGuardar 
-	pila addLast:elementoAGuardar.! !
+
+	pila addLast:elementoAGuardar.
+	self cambiarEstado.! !
 
 !OOStack methodsFor: 'comportamiento de stack' stamp: 'i 10/9/2022 15:38:05'!
 size
 	^pila size.! !
 
-!OOStack methodsFor: 'comportamiento de stack' stamp: 'i 10/9/2022 16:30:50'!
+!OOStack methodsFor: 'comportamiento de stack' stamp: 't 10/12/2022 19:55:16'!
 top
-	self chequeoDePilaVacia.
-	^pila last.! !
+	^status devolverTope: self. 
+	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -199,7 +388,31 @@ stackEmptyErrorDescription
 
 !classDefinition: #SentenceFinderByPrefix category: 'Stack-Exercise'!
 Object subclass: #SentenceFinderByPrefix
-	instanceVariableNames: ''
+	instanceVariableNames: 'stack'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
+
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 20:55:50'!
+find: prefijo! !
+
+!SentenceFinderByPrefix methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 21:00:45'!
+initializeWith: unStack
+
+	stack := unStack.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'SentenceFinderByPrefix class' category: 'Stack-Exercise'!
+SentenceFinderByPrefix class
+	instanceVariableNames: ''!
+
+!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 21:11:47'!
+prefixEmptyErrorDescription
+
+	^ 'Prefix is empty'! !
+
+!SentenceFinderByPrefix class methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 20:59:05'!
+with: unStack
+
+	^SentenceFinderByPrefix new initializeWith: unStack.! !
