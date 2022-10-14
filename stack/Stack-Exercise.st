@@ -120,9 +120,8 @@ test09CanNotPopWhenThereAreNoObjectsInTheStackAndTheStackHadObjects
 		
 ! !
 
-!OOStackTest methodsFor: 'test' stamp: 'JMB 10/8/2022 17:59:07'!
+!OOStackTest methodsFor: 'test' stamp: 'i 10/14/2022 16:51:17'!
 test10CanNotTopWhenThereAreNoObjectsInTheStack
-
 	| stack  |
 	
 	stack := OOStack new.
@@ -134,6 +133,42 @@ test10CanNotTopWhenThereAreNoObjectsInTheStack
 		
 ! !
 
+!OOStackTest methodsFor: 'test' stamp: 'i 10/14/2022 16:58:21'!
+test11PushWithLimitsAddsElements
+	| stack |
+	stack := OOStack conLimiteDe: 3.
+	
+	stack push: 'something'.
+	
+	self deny: stack isEmpty! !
+
+!OOStackTest methodsFor: 'test' stamp: 'i 10/14/2022 17:09:40'!
+test12SiSePusheaHastaElLimiteNoSePuedeSeguirPusheando
+
+	| stack |
+	stack := OOStack conLimiteDe: 3.
+	
+	stack push: 'something1'.
+	stack push: 'something2'.
+	 stack push: 'something3'.
+	
+	self
+		should: [ stack push: 'something4'. ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: OOStack stackFullErrorDescription equals: anError messageText ].
+! !
+
+!OOStackTest methodsFor: 'test' stamp: 'i 10/14/2022 17:17:09'!
+test13NoSePuedeCrearStackConLimiteNegativo
+	
+	self
+		should: [ OOStack conLimiteDe: -5. ]
+		raise: Error - MessageNotUnderstood 
+		withExceptionDo: [ :anError |
+			self assert: OOStack limiteNegativoErrorDescription equals: anError messageText ].
+! !
+
 
 !classDefinition: #SentenceFinderByPrefixTest category: 'Stack-Exercise'!
 TestCase subclass: #SentenceFinderByPrefixTest
@@ -142,7 +177,20 @@ TestCase subclass: #SentenceFinderByPrefixTest
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'i 10/13/2022 00:46:07'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'i 10/14/2022 15:48:36'!
+comparacionDeStack1: stack1 conStack2: stack2
+
+	| tamanioInicial |
+	
+	stack1 size = stack2 size ifFalse:[^false].
+	
+	tamanioInicial := stack1 size.
+	
+	tamanioInicial timesRepeat: [ (stack1 pop = stack2 pop) ifFalse: [^false] ].
+	
+	^true.! !
+
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'i 10/13/2022 00:46:07'!
 test01APrefixEmptyReturnAnError
 	| stack finder |
 	
@@ -168,7 +216,7 @@ test01APrefixEmptyReturnAnError
 			self assert: SentenceFinderByPrefix prefixNotValid equals: anError messageText ].
 		! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'i 10/13/2022 00:46:14'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'i 10/13/2022 00:46:14'!
 test02PrefijoNoPuedeTenerEspaciosVacios
 	| stack finder |
 	
@@ -194,7 +242,7 @@ test02PrefijoNoPuedeTenerEspaciosVacios
 			self assert: SentenceFinderByPrefix prefixNotValid equals: anError messageText ]
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'i 10/13/2022 00:46:19'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'i 10/13/2022 00:46:19'!
 test03PrefijoNoPuedeEmpezarConEspaciosVacios
 	| stack finder |
 	
@@ -220,7 +268,7 @@ test03PrefijoNoPuedeEmpezarConEspaciosVacios
 			self assert: SentenceFinderByPrefix prefixNotValid equals: anError messageText ]
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'i 10/12/2022 23:39:04'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'i 10/12/2022 23:39:04'!
 test04FindTiraErrorCuandoBuscamosAlgoEnMayusculaYEstaPeroEnMinuscula
 	| stack finder |
 	
@@ -244,7 +292,7 @@ test04FindTiraErrorCuandoBuscamosAlgoEnMayusculaYEstaPeroEnMinuscula
 			self assert: SentenceFinderByPrefix prefixNotFoundErrorDescription equals: anError messageText ]
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'i 10/13/2022 00:57:14'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'i 10/13/2022 00:57:14'!
 test06FindEncuentraNashei
 	| stack finder |
 	
@@ -261,7 +309,7 @@ test06FindEncuentraNashei
 	self assert: (finder find: 'nas') first = #('nashei') first.
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'i 10/13/2022 00:57:42'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'i 10/13/2022 00:57:42'!
 test07FindEncuentraCoscu
 	| stack finder |
 	
@@ -278,7 +326,7 @@ test07FindEncuentraCoscu
 	self assert: (finder find: 'Co') first = #('Coscu') first.
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'i 10/13/2022 01:00:28'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'i 10/13/2022 01:00:28'!
 test08FindEncuentraACoscuYACosculluela
 	| stack finder collectionParaComparar |
 	
@@ -299,7 +347,7 @@ test08FindEncuentraACoscuYACosculluela
 	self assert: (finder find: 'Co') = collectionParaComparar.
 	! !
 
-!SentenceFinderByPrefixTest methodsFor: 'as yet unclassified' stamp: 'i 10/13/2022 01:09:18'!
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'i 10/14/2022 15:49:22'!
 test09FindNoCambiaLaEstructuraDelStack
 	| stack stackAntesDeBuscar finder |
 	
@@ -325,7 +373,32 @@ test09FindNoCambiaLaEstructuraDelStack
 	
 	finder find: 'Co'.
 	
-	self assert: stack devuelveLaPila = stackAntesDeBuscar devuelveLaPila.
+	self assert: (self comparacionDeStack1: stack conStack2: stackAntesDeBuscar).
+	
+	
+	! !
+
+!SentenceFinderByPrefixTest methodsFor: 'testing' stamp: 'i 10/14/2022 16:26:01'!
+test10EjemploDeConsigna
+	| stack finder collectionParaComparar |
+	
+	stack := OOStack new.
+	
+	stack push: 'winter is coming'.
+	
+	stack push: 'winning is everything'.
+	
+	stack push: 'The winds of Winter'.
+	
+	stack push: 'Winter is here'.
+	
+	finder := SentenceFinderByPrefix with: stack.
+	
+	collectionParaComparar := OrderedCollection new.
+	
+	collectionParaComparar addAll: #('Winter is here').
+	
+	self assert: (finder find: 'Wint') first = #('Winter is here') first.
 	
 	
 	! !
@@ -353,7 +426,7 @@ eliminarTope: unStack
 Estado class
 	instanceVariableNames: ''!
 
-!Estado class methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 21:56:59'!
+!Estado class methodsFor: 'as yet unclassified' stamp: 'i 10/14/2022 16:42:49'!
 for: unStack
 
 	| subclaseDetectada |
@@ -370,15 +443,19 @@ Estado subclass: #HayElementosEnLaPila
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!HayElementosEnLaPila methodsFor: 'stack operations - double dispatch' stamp: 't 10/12/2022 22:32:04'!
+!HayElementosEnLaPila methodsFor: 'stack operations - double dispatch' stamp: 'i 10/14/2022 16:54:42'!
 devolverTope: unStack
-	
+
 	^unStack topCuandoHayElementos.! !
 
-!HayElementosEnLaPila methodsFor: 'stack operations - double dispatch' stamp: 't 10/12/2022 22:31:17'!
+!HayElementosEnLaPila methodsFor: 'stack operations - double dispatch' stamp: 'i 10/14/2022 16:55:22'!
 eliminarTope: unStack
 
 	^unStack popCuandoHayElementos! !
+
+!HayElementosEnLaPila methodsFor: 'stack operations - double dispatch' stamp: 'i 10/14/2022 16:47:26'!
+pushear: elementoAGuardar alStack: unStack.
+	^ unStack pushearCuandoNoEstaLleno: elementoAGuardar.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -386,11 +463,44 @@ eliminarTope: unStack
 HayElementosEnLaPila class
 	instanceVariableNames: ''!
 
-!HayElementosEnLaPila class methodsFor: 'as yet unclassified' stamp: 't 10/12/2022 21:58:17'!
+!HayElementosEnLaPila class methodsFor: 'as yet unclassified' stamp: 'i 10/14/2022 17:09:29'!
 correspondeAClase: unStack
 
-	^unStack isEmpty not.
+	^unStack isEmpty not and: [unStack estaLleno not].
 	! !
+
+
+!classDefinition: #LaPilaEstaLlena category: 'Stack-Exercise'!
+Estado subclass: #LaPilaEstaLlena
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'Stack-Exercise'!
+
+!LaPilaEstaLlena methodsFor: 'stack operations - double dispatch' stamp: 'i 10/14/2022 16:54:59'!
+devolverTope: unStack
+
+	^unStack topCuandoHayElementos.! !
+
+!LaPilaEstaLlena methodsFor: 'stack operations - double dispatch' stamp: 'i 10/14/2022 16:55:31'!
+eliminarTope: unStack
+
+	^unStack popCuandoHayElementos! !
+
+!LaPilaEstaLlena methodsFor: 'stack operations - double dispatch' stamp: 'i 10/14/2022 16:46:33'!
+pushear: elementoAGuardar alStack: unStack.
+	^ unStack pushearCuandoEstaLleno.
+	! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'LaPilaEstaLlena class' category: 'Stack-Exercise'!
+LaPilaEstaLlena class
+	instanceVariableNames: ''!
+
+!LaPilaEstaLlena class methodsFor: 'as yet unclassified' stamp: 'i 10/14/2022 16:43:28'!
+correspondeAClase: unStack
+	^unStack estaLleno.! !
 
 
 !classDefinition: #NoHayElementosEnLaPila category: 'Stack-Exercise'!
@@ -400,15 +510,19 @@ Estado subclass: #NoHayElementosEnLaPila
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!NoHayElementosEnLaPila methodsFor: 'stack operations - double dispatch' stamp: 't 10/12/2022 22:07:11'!
+!NoHayElementosEnLaPila methodsFor: 'stack operations - double dispatch' stamp: 'i 10/14/2022 16:41:39'!
 devolverTope: unStack
 
 	^unStack topCuandoNoHayElementos.! !
 
-!NoHayElementosEnLaPila methodsFor: 'stack operations - double dispatch' stamp: 't 10/12/2022 22:33:53'!
+!NoHayElementosEnLaPila methodsFor: 'stack operations - double dispatch' stamp: 'i 10/14/2022 16:41:34'!
 eliminarTope: unStack
 
 	^unStack popCuandoNoHayElementos.! !
+
+!NoHayElementosEnLaPila methodsFor: 'stack operations - double dispatch' stamp: 'i 10/14/2022 16:47:14'!
+pushear: elementoAGuardar alStack: unStack.
+	^ unStack pushearCuandoNoEstaLleno: elementoAGuardar.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -425,31 +539,31 @@ correspondeAClase: unStack
 
 !classDefinition: #OOStack category: 'Stack-Exercise'!
 Object subclass: #OOStack
-	instanceVariableNames: 'pila status'
+	instanceVariableNames: 'pila limite'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'Stack-Exercise'!
 
-!OOStack methodsFor: 'private' stamp: 'i 10/12/2022 23:21:51'!
-cambiarEstado
+!OOStack methodsFor: 'private' stamp: 'i 10/14/2022 16:43:55'!
+estaLleno
+	^pila size = limite.! !
 
-	status := Estado for: self.! !
-
-!OOStack methodsFor: 'private' stamp: 'i 10/13/2022 01:08:57'!
-devuelveLaPila
-	^pila.! !
-
-!OOStack methodsFor: 'private' stamp: 't 10/12/2022 22:02:35'!
+!OOStack methodsFor: 'private' stamp: 'i 10/14/2022 16:52:06'!
 initialize
-	pila := OrderedCollection new.
-	status :=  	Estado for: self.! !
+	pila := OrderedCollection new.! !
 
-!OOStack methodsFor: 'private' stamp: 'i 10/12/2022 23:22:33'!
+!OOStack methodsFor: 'private' stamp: 'i 10/14/2022 17:16:53'!
+initializeWith: unLimit
+	unLimit < 0 ifTrue: [self signalLimiteNegativo].	
+
+	pila := OrderedCollection new.
+	limite := unLimit ! !
+
+!OOStack methodsFor: 'private' stamp: 'i 10/14/2022 15:53:42'!
 popCuandoHayElementos
 	| elementoADevolver |
 	
 	elementoADevolver := pila removeLast.
-	self cambiarEstado.
 	
 	^elementoADevolver. ! !
 
@@ -458,16 +572,34 @@ popCuandoNoHayElementos
 
 	^self signalPilaEstaVacia.! !
 
+!OOStack methodsFor: 'private' stamp: 'i 10/14/2022 16:48:34'!
+pushearCuandoEstaLleno
+	^self signalPilaEstaLlena.! !
+
+!OOStack methodsFor: 'private' stamp: 'i 10/14/2022 16:50:25'!
+pushearCuandoNoEstaLleno: elementoAGuardar
+	pila addLast:elementoAGuardar.! !
+
+!OOStack methodsFor: 'private' stamp: 'i 10/14/2022 17:15:15'!
+signalLimiteNegativo
+
+	self error: self class limiteNegativoErrorDescription! !
+
+!OOStack methodsFor: 'private' stamp: 'i 10/14/2022 16:49:15'!
+signalPilaEstaLlena
+
+	self error: self class stackFullErrorDescription! !
+
 !OOStack methodsFor: 'private' stamp: 'i 10/9/2022 15:42:28'!
 signalPilaEstaVacia
 	self error: self class stackEmptyErrorDescription ! !
 
-!OOStack methodsFor: 'private' stamp: 't 10/12/2022 22:32:04'!
+!OOStack methodsFor: 'private' stamp: 'i 10/14/2022 15:53:55'!
 topCuandoHayElementos
 
 	^pila last.! !
 
-!OOStack methodsFor: 'private' stamp: 't 10/12/2022 22:09:06'!
+!OOStack methodsFor: 'private' stamp: 'i 10/14/2022 15:53:50'!
 topCuandoNoHayElementos
 
 	^self signalPilaEstaVacia.! !
@@ -477,24 +609,32 @@ topCuandoNoHayElementos
 isEmpty
 	^ pila isEmpty.! !
 
-!OOStack methodsFor: 'comportamiento de stack' stamp: 't 10/12/2022 22:19:37'!
-pop
-	^status eliminarTope: self.! !
+!OOStack methodsFor: 'comportamiento de stack' stamp: 'i 10/14/2022 15:52:09'!
+pop	| estado |
+	
+	estado := Estado for: self.
+	 
+	^estado eliminarTope: self.! !
 
-!OOStack methodsFor: 'comportamiento de stack' stamp: 't 10/12/2022 22:29:09'!
+!OOStack methodsFor: 'comportamiento de stack' stamp: 'i 10/14/2022 16:45:21'!
 push: elementoAGuardar 
-
-	pila addLast:elementoAGuardar.
-	self cambiarEstado.! !
+	| estado |
+	
+	estado := Estado for: self.
+	
+	^estado pushear: elementoAGuardar alStack: self.! !
 
 !OOStack methodsFor: 'comportamiento de stack' stamp: 'i 10/9/2022 15:38:05'!
 size
 	^pila size.! !
 
-!OOStack methodsFor: 'comportamiento de stack' stamp: 't 10/12/2022 19:55:16'!
+!OOStack methodsFor: 'comportamiento de stack' stamp: 'i 10/14/2022 15:53:03'!
 top
-	^status devolverTope: self. 
-	! !
+	| estado |
+	
+	estado := Estado for: self.
+	
+	^estado devolverTope: self. ! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -502,10 +642,24 @@ top
 OOStack class
 	instanceVariableNames: ''!
 
+!OOStack class methodsFor: 'error descriptions' stamp: 'i 10/14/2022 17:12:52'!
+limiteNegativoErrorDescription
+	^ ' El limite es negativo '! !
+
 !OOStack class methodsFor: 'error descriptions' stamp: 'HernanWilkinson 5/7/2012 11:51'!
 stackEmptyErrorDescription
 	
 	^ 'Stack is empty'! !
+
+!OOStack class methodsFor: 'error descriptions' stamp: 'i 10/14/2022 16:49:42'!
+stackFullErrorDescription
+
+	^ 'Stack is full'! !
+
+
+!OOStack class methodsFor: 'instance creation' stamp: 'i 10/14/2022 17:14:16'!
+conLimiteDe: unLimite
+	^OOStack new initializeWith: unLimite! !
 
 
 !classDefinition: #SentenceFinderByPrefix category: 'Stack-Exercise'!
@@ -532,11 +686,10 @@ convertirStackEnCollection
 	
 	! !
 
-!SentenceFinderByPrefix methodsFor: 'private' stamp: 'i 10/13/2022 00:51:22'!
+!SentenceFinderByPrefix methodsFor: 'private' stamp: 'i 10/14/2022 16:31:56'!
 esValidoElPrefijo: unPrefijo
 
-	(unPrefijo = '')  ifTrue: [^ false].
-	((unPrefijo findString: ' ' startingAt: 0) > 0)  ifTrue: [^ false].
+	((unPrefijo = '')  or: [(unPrefijo findString: ' ' startingAt: 0) > 0]) ifTrue: [^ false].
 	
 	^true.
 	
@@ -560,7 +713,7 @@ signalPrefixNotValid
 	self error: self class prefixNotValid! !
 
 
-!SentenceFinderByPrefix methodsFor: 'finder' stamp: 'i 10/13/2022 00:53:10'!
+!SentenceFinderByPrefix methodsFor: 'finder' stamp: 'i 10/14/2022 16:26:23'!
 find: prefijo
 	| listaDeStrings listaDeStringsEncontrados |
 	
@@ -568,7 +721,7 @@ find: prefijo
 	
 	listaDeStrings := self convertirStackEnCollection.
 	
-	listaDeStringsEncontrados := listaDeStrings select: [:stringActual | (stringActual findString: prefijo startingAt: 0) > 0].
+	listaDeStringsEncontrados := listaDeStrings select: [:stringActual | stringActual beginsWith: prefijo].
 	
 	listaDeStringsEncontrados isEmpty ifTrue: [^self signalPrefixNotFound].
 	
