@@ -145,21 +145,21 @@ test19RecibirUnComandoInvalidoCortaLaEjecucionDeComandosYTiraError
 
 !classDefinition: #MarsRover category: 'MarsRover'!
 Object subclass: #MarsRover
-	instanceVariableNames: 'coordenada puntoCardinal'
+	instanceVariableNames: 'coordenada orientacionActual'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'MarsRover'!
 
-!MarsRover methodsFor: 'initialization' stamp: 'i 10/30/2022 16:57:40'!
+!MarsRover methodsFor: 'initialization' stamp: 't 11/2/2022 17:12:31'!
 initializeUbicadoEn: unaCoordenada apuntandoA: unPuntoCardinal 
 
 	coordenada := unaCoordenada.
-	puntoCardinal := unPuntoCardinal.! !
+	orientacionActual := OrientacionDelMarsRover conOrientacion: unPuntoCardinal.! !
 
 
-!MarsRover methodsFor: 'movimiento del rover' stamp: 'i 10/30/2022 18:47:18'!
+!MarsRover methodsFor: 'movimiento del rover' stamp: 't 11/2/2022 17:23:00'!
 estaApuntandoA: unPuntoCardinal 
-	^puntoCardinal = unPuntoCardinal.! !
+	^orientacionActual class coincideCon: unPuntoCardinal.! !
 
 !MarsRover methodsFor: 'movimiento del rover' stamp: 'i 10/30/2022 18:46:33'!
 estaUbicadoEn: unaCoordenada 
@@ -177,20 +177,47 @@ recibirComandos: anArray
 	! !
 
 
-!MarsRover methodsFor: 'private' stamp: 'i 10/30/2022 17:31:48'!
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 18:01:53'!
 avanzar
-	puntoCardinal = #N ifTrue: [self avanzarEnEjeY].
-	puntoCardinal = #O ifTrue: [self retrocederEnEjeX].
-	puntoCardinal = #S ifTrue: [self retrocederEnEjeY].
-	puntoCardinal = #E ifTrue: [self avanzarEnEjeX].! !
+	
+	orientacionActual darDireccionesParaQueAvance: self.
+! !
 
-!MarsRover methodsFor: 'private' stamp: 'i 10/30/2022 17:55:50'!
-avanzarEnEjeX
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 17:20:03'!
+avanzarHaciaElEste
 	coordenada := coordenada + (1@0)! !
 
-!MarsRover methodsFor: 'private' stamp: 'i 10/30/2022 17:51:20'!
-avanzarEnEjeY
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 17:20:17'!
+avanzarHaciaElNorte
 	coordenada := coordenada + (0@1)! !
+
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 17:20:35'!
+avanzarHaciaElOeste
+	coordenada := coordenada - (1@0)! !
+
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 17:20:50'!
+avanzarHaciaElSur
+	coordenada := coordenada - (0@1)! !
+
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 17:27:08'!
+cambiarOrientacionAlEste
+
+	orientacionActual := OrientacionEste new.! !
+
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 17:26:49'!
+cambiarOrientacionAlNorte
+
+	orientacionActual := OrientacionNorte new.! !
+
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 17:26:58'!
+cambiarOrientacionAlOeste
+
+	orientacionActual := OrientacionOeste new.! !
+
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 17:26:32'!
+cambiarOrientacionAlSur
+
+	orientacionActual := OrientacionSur new.! !
 
 !MarsRover methodsFor: 'private' stamp: 'i 10/30/2022 18:13:34'!
 comandoInvalido: unComando
@@ -207,34 +234,24 @@ recibirComando: unComando
 
 	! !
 
-!MarsRover methodsFor: 'private' stamp: 'i 10/30/2022 17:32:42'!
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 18:09:36'!
 retroceder
-	puntoCardinal = #N ifTrue: [self retrocederEnEjeY].
-	puntoCardinal = #O ifTrue: [self avanzarEnEjeX].
-	puntoCardinal = #S ifTrue: [self avanzarEnEjeY].
-	puntoCardinal = #E ifTrue: [self retrocederEnEjeX].! !
+	
+	orientacionActual darDireccionesParaQueRetroceda: self
+	! !
 
-!MarsRover methodsFor: 'private' stamp: 'i 10/30/2022 17:56:52'!
-retrocederEnEjeX
-	coordenada := coordenada - (1@0)! !
-
-!MarsRover methodsFor: 'private' stamp: 'i 10/30/2022 17:52:51'!
-retrocederEnEjeY
-	coordenada := coordenada - (0@1)! !
-
-!MarsRover methodsFor: 'private' stamp: 'i 10/30/2022 17:23:32'!
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 18:07:42'!
 rotarALaDerecha
-	puntoCardinal = #N ifTrue: [puntoCardinal := #E. ^self].
-	puntoCardinal = #O ifTrue: [puntoCardinal := #N. ^self].
-	puntoCardinal = #S ifTrue: [puntoCardinal := #O. ^self].
-	puntoCardinal = #E ifTrue: [puntoCardinal := #S].! !
 
-!MarsRover methodsFor: 'private' stamp: 'i 10/30/2022 17:21:10'!
+	orientacionActual darDireccionesParaQueRoteALaDerecha: self.
+! !
+
+!MarsRover methodsFor: 'private' stamp: 't 11/2/2022 18:09:03'!
 rotarALaIzquierda
-	puntoCardinal = #N ifTrue: [puntoCardinal := #O. ^self].
-	puntoCardinal = #O ifTrue: [puntoCardinal := #S. ^self].
-	puntoCardinal = #S ifTrue: [puntoCardinal := #E. ^self].
-	puntoCardinal = #E ifTrue: [puntoCardinal := #N].! !
+	
+	orientacionActual darDireccionesParaQueRoteALaIzquierda: self.
+	
+! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -246,3 +263,206 @@ MarsRover class
 ubicadoEn: aPoint apuntandoA: aSymbol 
 
 	^self new initializeUbicadoEn: aPoint apuntandoA: aSymbol ! !
+
+
+!classDefinition: #OrientacionDelMarsRover category: 'MarsRover'!
+Object subclass: #OrientacionDelMarsRover
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!OrientacionDelMarsRover methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:10:31'!
+darDireccionesParaQueAvance: unMars
+
+	self subclassResponsibility ! !
+
+!OrientacionDelMarsRover methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:10:57'!
+darDireccionesParaQueRetroceda: unMarsRover
+
+	self subclassResponsibility ! !
+
+!OrientacionDelMarsRover methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:11:16'!
+darDireccionesParaQueRoteALaDerecha: unMarsRover
+
+	self subclassResponsibility 
+! !
+
+!OrientacionDelMarsRover methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:11:38'!
+darDireccionesParaQueRoteALaIzquierda: unMarsRover
+
+	self subclassResponsibility! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'OrientacionDelMarsRover class' category: 'MarsRover'!
+OrientacionDelMarsRover class
+	instanceVariableNames: ''!
+
+!OrientacionDelMarsRover class methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 17:41:11'!
+conOrientacion: unPuntoCardinal
+
+	| subclaseDetectada |
+	
+	subclaseDetectada := OrientacionDelMarsRover subclasses detect: [:OrientacionDelMarsRoverSubclass | (OrientacionDelMarsRoverSubclass coincideCon: unPuntoCardinal)].
+	
+	^subclaseDetectada new.
+	! !
+
+
+!classDefinition: #OrientacionEste category: 'MarsRover'!
+OrientacionDelMarsRover subclass: #OrientacionEste
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!OrientacionEste methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:01:53'!
+darDireccionesParaQueAvance: unMarsRover
+
+	unMarsRover avanzarHaciaElEste.! !
+
+!OrientacionEste methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:09:36'!
+darDireccionesParaQueRetroceda: unMarsRover
+
+	unMarsRover avanzarHaciaElOeste.! !
+
+!OrientacionEste methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:07:42'!
+darDireccionesParaQueRoteALaDerecha: unMarsRover
+
+	unMarsRover cambiarOrientacionAlSur
+
+	! !
+
+!OrientacionEste methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:09:03'!
+darDireccionesParaQueRoteALaIzquierda: unMarsRover
+
+	unMarsRover cambiarOrientacionAlNorte.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'OrientacionEste class' category: 'MarsRover'!
+OrientacionEste class
+	instanceVariableNames: ''!
+
+!OrientacionEste class methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 17:08:05'!
+coincideCon: unPuntoCardinal
+
+	 ^ #E = unPuntoCardinal.! !
+
+
+!classDefinition: #OrientacionNorte category: 'MarsRover'!
+OrientacionDelMarsRover subclass: #OrientacionNorte
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!OrientacionNorte methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:01:53'!
+darDireccionesParaQueAvance: unMarsRover
+
+	unMarsRover avanzarHaciaElNorte.! !
+
+!OrientacionNorte methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:09:36'!
+darDireccionesParaQueRetroceda: unMarsRover
+
+	unMarsRover avanzarHaciaElSur.! !
+
+!OrientacionNorte methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:07:42'!
+darDireccionesParaQueRoteALaDerecha: unMarsRover
+
+	unMarsRover cambiarOrientacionAlEste! !
+
+!OrientacionNorte methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:09:03'!
+darDireccionesParaQueRoteALaIzquierda: unMarsRover
+
+	unMarsRover cambiarOrientacionAlOeste.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'OrientacionNorte class' category: 'MarsRover'!
+OrientacionNorte class
+	instanceVariableNames: ''!
+
+!OrientacionNorte class methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 17:08:18'!
+coincideCon: unPuntoCardinal
+
+	 ^ #N = unPuntoCardinal.! !
+
+
+!classDefinition: #OrientacionOeste category: 'MarsRover'!
+OrientacionDelMarsRover subclass: #OrientacionOeste
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!OrientacionOeste methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:01:53'!
+darDireccionesParaQueAvance: unMarsRover
+
+	unMarsRover avanzarHaciaElOeste.! !
+
+!OrientacionOeste methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:09:36'!
+darDireccionesParaQueRetroceda: unMarsRover
+
+	unMarsRover avanzarHaciaElEste .! !
+
+!OrientacionOeste methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:07:42'!
+darDireccionesParaQueRoteALaDerecha: unMarsRover
+
+	unMarsRover cambiarOrientacionAlNorte! !
+
+!OrientacionOeste methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:09:03'!
+darDireccionesParaQueRoteALaIzquierda: unMarsRover
+
+	unMarsRover cambiarOrientacionAlSur.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'OrientacionOeste class' category: 'MarsRover'!
+OrientacionOeste class
+	instanceVariableNames: ''!
+
+!OrientacionOeste class methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 17:08:27'!
+coincideCon: unPuntoCardinal
+
+	 ^ #O = unPuntoCardinal.! !
+
+
+!classDefinition: #OrientacionSur category: 'MarsRover'!
+OrientacionDelMarsRover subclass: #OrientacionSur
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'MarsRover'!
+
+!OrientacionSur methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:01:53'!
+darDireccionesParaQueAvance: unMarsRover
+
+	unMarsRover avanzarHaciaElSur.! !
+
+!OrientacionSur methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:09:36'!
+darDireccionesParaQueRetroceda: unMarsRover
+
+	unMarsRover avanzarHaciaElNorte.! !
+
+!OrientacionSur methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:07:42'!
+darDireccionesParaQueRoteALaDerecha: unMarsRover
+
+	unMarsRover cambiarOrientacionAlOeste! !
+
+!OrientacionSur methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 18:09:03'!
+darDireccionesParaQueRoteALaIzquierda: unMarsRover
+
+	unMarsRover cambiarOrientacionAlEste.! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'OrientacionSur class' category: 'MarsRover'!
+OrientacionSur class
+	instanceVariableNames: ''!
+
+!OrientacionSur class methodsFor: 'as yet unclassified' stamp: 't 11/2/2022 17:08:39'!
+coincideCon: unPuntoCardinal
+
+	 ^ #S = unPuntoCardinal.! !
