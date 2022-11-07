@@ -88,8 +88,16 @@ test07AccountKnowsItsTransactions
 	self assert: (account transactions includes: deposit).
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'i 11/6/2022 21:58:29'!
-test08LaCuentaALaCualSeLeTransfierePasaATenerElMonto 
+
+!classDefinition: #TransferenciaTest category: 'ServiciosFinancieros-Ejercicio'!
+TestCase subclass: #TransferenciaTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:26:59'!
+test01LaCuentaALaCualSeLeTransfierePasaATenerElMonto 
 
 	| accountQueRecibePlata accountQueTransfierePlata |
 	
@@ -100,12 +108,10 @@ test08LaCuentaALaCualSeLeTransfierePasaATenerElMonto
 	
 	Transferencia register: 100*peso desde: accountQueTransfierePlata hacia: accountQueRecibePlata.
 	
-	self assert: 100 * peso equals: accountQueRecibePlata balance
+	self assert: 100 * peso equals: accountQueRecibePlata balance! !
 
-! !
-
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'i 11/6/2022 21:59:33'!
-test09LaCuentaQueTransfiereDejaDeTenerElMonto 
+!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:27:18'!
+test02LaCuentaQueTransfiereDejaDeTenerElMonto 
 
 	| accountQueRecibePlata accountQueTransfierePlata |
 	
@@ -116,12 +122,10 @@ test09LaCuentaQueTransfiereDejaDeTenerElMonto
 	
 	Transferencia register: 100*peso desde: accountQueTransfierePlata hacia: accountQueRecibePlata.
 	
-	self assert: 0 * peso equals: accountQueTransfierePlata balance
+	self assert: 0 * peso equals: accountQueTransfierePlata balance! !
 
-! !
-
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'i 11/6/2022 22:00:04'!
-test10SeRegistraLaTransferenciaEnLasDosCuentas
+!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:27:56'!
+test03SeRegistraLaTransferenciaEnLasDosCuentas
 
 	| accountQueRecibePlata accountQueTransfierePlata transferencia |
 	
@@ -132,13 +136,11 @@ test10SeRegistraLaTransferenciaEnLasDosCuentas
 	
 	transferencia := Transferencia register: 100*peso desde: accountQueTransfierePlata hacia: accountQueRecibePlata.
 	
-	self assert: (accountQueRecibePlata hasRegistered: transferencia).
-	self assert: (accountQueTransfierePlata hasRegistered: transferencia).
+	self assert: (accountQueRecibePlata hasRegistered: transferencia pataDeDeposit).
+	self assert: (accountQueTransfierePlata hasRegistered: transferencia pataDeWithdraw).! !
 
-! !
-
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'i 11/7/2022 15:58:38'!
-test11LaTransferenciaConoceSuValor
+!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:28:12'!
+test04LaTransferenciaConoceSuValor
 
 	| accountQueRecibePlata accountQueTransfierePlata transferencia |
 	
@@ -149,9 +151,41 @@ test11LaTransferenciaConoceSuValor
 	
 	transferencia := Transferencia register: 100*peso desde: accountQueTransfierePlata hacia: accountQueRecibePlata.
 	
-	self assert: 100 * peso equals: transferencia value.
+	self assert: 100 * peso equals: transferencia value.! !
 
-! !
+!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:40:47'!
+test05LaPataDeWithdrawTieneComoContraparteALaPataDeDeposito
+
+	| accountQueRecibePlata accountQueTransfierePlata transferencia pataDeDeposito pataDeWithdraw |
+	
+	accountQueRecibePlata := ReceptiveAccount new.
+	accountQueTransfierePlata := ReceptiveAccount new.
+	
+	Deposit register: 100 * peso on: accountQueTransfierePlata.
+	
+	transferencia := Transferencia register: 100*peso desde: accountQueTransfierePlata hacia: accountQueRecibePlata.
+	
+	pataDeDeposito := transferencia pataDeDeposit.
+	pataDeWithdraw := transferencia pataDeWithdraw.
+	
+	self assert: (pataDeWithdraw esContraparte: pataDeDeposito).! !
+
+!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:29:00'!
+test06LaPataDeDepositoTieneComoContraparteALaPataDeWithdraw
+
+	| accountQueRecibePlata accountQueTransfierePlata transferencia pataDeDeposit pataDeWithdraw |
+	
+	accountQueRecibePlata := ReceptiveAccount new.
+	accountQueTransfierePlata := ReceptiveAccount new.
+	
+	Deposit register: 100 * peso on: accountQueTransfierePlata.
+	
+	transferencia := Transferencia register: 100*peso desde: accountQueTransfierePlata hacia: accountQueRecibePlata.
+	
+	pataDeDeposit := transferencia pataDeDeposit.
+	pataDeWithdraw := transferencia pataDeWithdraw.
+	
+	self assert: (pataDeDeposit esContraparte: pataDeWithdraw ).! !
 
 
 !classDefinition: #AccountTransaction category: 'ServiciosFinancieros-Ejercicio'!
@@ -223,49 +257,20 @@ for: aValue
 	^ self new initializeFor: aValue ! !
 
 
-!classDefinition: #Transferencia category: 'ServiciosFinancieros-Ejercicio'!
-AccountTransaction subclass: #Transferencia
-	instanceVariableNames: 'value cuentaQueTransfiere cuentaQueRecibe'
+!classDefinition: #DepositoDeTransferencia category: 'ServiciosFinancieros-Ejercicio'!
+Deposit subclass: #DepositoDeTransferencia
+	instanceVariableNames: 'contraparte'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/6/2022 20:56:08'!
-initializeFor: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
+!DepositoDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:15:42'!
+agregarContraparte: unWithdraw
+	contraparte := unWithdraw ! !
 
-	value := unMonto.
-	cuentaQueTransfiere := unaCuentaQueTransfiere .
-	cuentaQueRecibe := unaCuentaQueRecibe .! !
-
-!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 15:59:10'!
-value
-
-	^ value! !
-
-!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/6/2022 21:05:38'!
-valueForBalanceEnLaCuenta: unaCuenta
-
-	unaCuenta = cuentaQueTransfiere ifTrue: [^value negated].
-	unaCuenta = cuentaQueRecibe ifTrue: [^value].! !
-
-"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
-
-!classDefinition: 'Transferencia class' category: 'ServiciosFinancieros-Ejercicio'!
-Transferencia class
-	instanceVariableNames: ''!
-
-!Transferencia class methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 15:52:30'!
-register: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
-	
-	| transaction |
-	
-	transaction := self new initializeFor: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe. 
-	unaCuentaQueTransfiere register: transaction .
-	unaCuentaQueRecibe register: transaction.
-		
-	^ transaction
-	
-	! !
+!DepositoDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:22:07'!
+esContraparte: unPosibleWithdarDeTransferencia
+	^contraparte = unPosibleWithdarDeTransferencia ! !
 
 
 !classDefinition: #Withdraw category: 'ServiciosFinancieros-Ejercicio'!
@@ -301,6 +306,22 @@ Withdraw class
 for: aValue
 
 	^ self new initializeFor: aValue ! !
+
+
+!classDefinition: #WithdrawDeTransferencia category: 'ServiciosFinancieros-Ejercicio'!
+Withdraw subclass: #WithdrawDeTransferencia
+	instanceVariableNames: 'contraparte'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!WithdrawDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:15:20'!
+agregarContraparte: unDeposito
+	contraparte := unDeposito ! !
+
+!WithdrawDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:09:11'!
+esContraparte: unPosibleDepositoDeTransferencia 
+	^contraparte = unPosibleDepositoDeTransferencia ! !
 
 
 !classDefinition: #ReceptiveAccount category: 'ServiciosFinancieros-Ejercicio'!
@@ -339,12 +360,53 @@ transactions
 	^ transactions copy! !
 
 
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 'i 11/6/2022 20:05:55'!
-transferir: unMonto aLaCuenta: unaCuentaQueRecibeMonto
-	
-	Withdraw register: unMonto on: self .
+
+!classDefinition: #Transferencia category: 'ServiciosFinancieros-Ejercicio'!
+Object subclass: #Transferencia
+	instanceVariableNames: 'value cuentaQueTransfiere cuentaQueRecibe pataDeDeposito pataDeWithdraw'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
 
-	Deposit register: unMonto on: unaCuentaQueRecibeMonto 
+!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:41:37'!
+initializeFor: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
+
+	value := unMonto.
+	cuentaQueTransfiere := unaCuentaQueTransfiere .
+	cuentaQueRecibe := unaCuentaQueRecibe .
+	pataDeDeposito := DepositoDeTransferencia register: unMonto on: unaCuentaQueRecibe .
+	pataDeWithdraw := WithdrawDeTransferencia register: unMonto on: unaCuentaQueTransfiere .
+	pataDeDeposito agregarContraparte: pataDeWithdraw.
+	pataDeWithdraw agregarContraparte: pataDeDeposito ! !
+
+!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 17:50:23'!
+pataDeDeposit
+	^ pataDeDeposito! !
+
+!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 17:51:07'!
+pataDeWithdraw
+	^ pataDeWithdraw! !
+
+!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 15:59:10'!
+value
+
+	^ value! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'Transferencia class' category: 'ServiciosFinancieros-Ejercicio'!
+Transferencia class
+	instanceVariableNames: ''!
+
+!Transferencia class methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:17:10'!
+register: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
 	
+	| transaction |
+	
+	transaction := self new initializeFor: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe. 
+	"unaCuentaQueTransfiere register: transaction .
+	unaCuentaQueRecibe register: transaction."
+		
+	^ transaction
 	
 	! !
