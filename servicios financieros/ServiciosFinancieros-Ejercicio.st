@@ -137,20 +137,19 @@ test10SeRegistraLaTransferenciaEnLasDosCuentas
 
 ! !
 
-!ReceptiveAccountTest methodsFor: 'tests' stamp: 'i 11/6/2022 22:00:53'!
-test11NoSePuedeTransferirSiNoSeTieneSuficienteDineroEnLaCuenta
+!ReceptiveAccountTest methodsFor: 'tests' stamp: 'i 11/7/2022 15:58:38'!
+test11LaTransferenciaConoceSuValor
 
 	| accountQueRecibePlata accountQueTransfierePlata transferencia |
 	
 	accountQueRecibePlata := ReceptiveAccount new.
 	accountQueTransfierePlata := ReceptiveAccount new.
 	
-	Deposit register: 0 * peso on: accountQueTransfierePlata.
+	Deposit register: 100 * peso on: accountQueTransfierePlata.
 	
 	transferencia := Transferencia register: 100*peso desde: accountQueTransfierePlata hacia: accountQueRecibePlata.
 	
-	self deny: (accountQueRecibePlata hasRegistered: transferencia).
-	self deny: (accountQueTransfierePlata hasRegistered: transferencia).
+	self assert: 100 * peso equals: transferencia value.
 
 ! !
 
@@ -238,6 +237,11 @@ initializeFor: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
 	cuentaQueTransfiere := unaCuentaQueTransfiere .
 	cuentaQueRecibe := unaCuentaQueRecibe .! !
 
+!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 15:59:10'!
+value
+
+	^ value! !
+
 !Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/6/2022 21:05:38'!
 valueForBalanceEnLaCuenta: unaCuenta
 
@@ -250,12 +254,10 @@ valueForBalanceEnLaCuenta: unaCuenta
 Transferencia class
 	instanceVariableNames: ''!
 
-!Transferencia class methodsFor: 'as yet unclassified' stamp: 'i 11/6/2022 21:56:37'!
+!Transferencia class methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 15:52:30'!
 register: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
 	
 	| transaction |
-	
-	unaCuentaQueTransfiere balance < unMonto ifTrue: [^self].
 	
 	transaction := self new initializeFor: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe. 
 	unaCuentaQueTransfiere register: transaction .
