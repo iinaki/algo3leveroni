@@ -1,3 +1,86 @@
+!classDefinition: #PortfolioTest category: 'ServiciosFinancieros-Ejercicio'!
+TestCase subclass: #PortfolioTest
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:21:59'!
+test01
+
+	| portfolio unaCuenta |
+	portfolio := Portfolio new.
+	unaCuenta := ReceptiveAccount new.
+	Deposit register: 50*peso on: unaCuenta.
+	
+	portfolio add: unaCuenta.
+	
+	self assert: 50 * peso equals: portfolio balance.
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:50:21'!
+test02
+
+	| portfolio unaCuenta otraCuenta |
+	portfolio := Portfolio new.
+	unaCuenta := ReceptiveAccount new.
+	otraCuenta := ReceptiveAccount new.
+	Deposit register: 50*peso on: unaCuenta.
+	Deposit register: 50*peso on: otraCuenta .
+		
+	portfolio add: unaCuenta.
+	portfolio add: otraCuenta .
+			
+	self assert: 100 * peso equals: portfolio balance.
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 21:11:41'!
+test03
+
+	| portfolio unaCuenta unDeposito |
+	portfolio := Portfolio new.
+	unaCuenta := ReceptiveAccount new.
+	unDeposito := Deposit register: 50*peso on: unaCuenta.
+		
+	portfolio add: unaCuenta.
+			
+	self assert: (portfolio hasRegistered: unDeposito).
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 21:28:27'!
+test04
+
+	| portfolio unaCuenta unDeposito |
+	portfolio := Portfolio new.
+	unaCuenta := ReceptiveAccount new.
+	unDeposito := Deposit register: 50*peso on: unaCuenta.
+		
+	portfolio add: unaCuenta.
+			
+	self assert: (unaCuenta transactions = (portfolio transaccionesDeLaCuenta: unaCuenta) ).
+	
+	! !
+
+!PortfolioTest methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 21:31:41'!
+test05
+
+	| portfolio unaCuenta otraCuenta |
+	portfolio := Portfolio new.
+	unaCuenta := ReceptiveAccount new.
+	otraCuenta := ReceptiveAccount new.
+	
+	Deposit register: 50*peso on: otraCuenta.
+		
+	portfolio add: unaCuenta.
+			
+	self deny: (otraCuenta transactions = (portfolio transaccionesDeLaCuenta: otraCuenta ) ).
+	
+	! !
+
+
 !classDefinition: #ReceptiveAccountTest category: 'ServiciosFinancieros-Ejercicio'!
 TestCase subclass: #ReceptiveAccountTest
 	instanceVariableNames: ''
@@ -240,8 +323,8 @@ value
 
 	^ value! !
 
-!Deposit methodsFor: 'value' stamp: 'i 11/6/2022 21:05:53'!
-valueForBalanceEnLaCuenta: unaCuenta
+!Deposit methodsFor: 'value' stamp: 'i 11/8/2022 19:51:16'!
+valueForBalance
 
 	^ self value! !
 
@@ -255,22 +338,6 @@ Deposit class
 for: aValue
 
 	^ self new initializeFor: aValue ! !
-
-
-!classDefinition: #DepositoDeTransferencia category: 'ServiciosFinancieros-Ejercicio'!
-Deposit subclass: #DepositoDeTransferencia
-	instanceVariableNames: 'contraparte'
-	classVariableNames: ''
-	poolDictionaries: ''
-	category: 'ServiciosFinancieros-Ejercicio'!
-
-!DepositoDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:15:42'!
-agregarContraparte: unWithdraw
-	contraparte := unWithdraw ! !
-
-!DepositoDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:22:07'!
-esContraparte: unPosibleWithdarDeTransferencia
-	^contraparte = unPosibleWithdarDeTransferencia ! !
 
 
 !classDefinition: #Withdraw category: 'ServiciosFinancieros-Ejercicio'!
@@ -291,8 +358,8 @@ value
 
 	^ value! !
 
-!Withdraw methodsFor: 'value' stamp: 'i 11/6/2022 21:05:59'!
-valueForBalanceEnLaCuenta: unaCuenta
+!Withdraw methodsFor: 'value' stamp: 'i 11/8/2022 19:51:26'!
+valueForBalance
 
 	^ value negated! !
 
@@ -308,20 +375,126 @@ for: aValue
 	^ self new initializeFor: aValue ! !
 
 
-!classDefinition: #WithdrawDeTransferencia category: 'ServiciosFinancieros-Ejercicio'!
-Withdraw subclass: #WithdrawDeTransferencia
-	instanceVariableNames: 'contraparte'
+!classDefinition: #PataDeTansferencia category: 'ServiciosFinancieros-Ejercicio'!
+Object subclass: #PataDeTansferencia
+	instanceVariableNames: 'contraparte value'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!WithdrawDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:15:20'!
-agregarContraparte: unDeposito
-	contraparte := unDeposito ! !
+!PataDeTansferencia methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:40:49'!
+agregarContraparte: unaContraparte
+	contraparte := unaContraparte ! !
 
-!WithdrawDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:09:11'!
-esContraparte: unPosibleDepositoDeTransferencia 
-	^contraparte = unPosibleDepositoDeTransferencia ! !
+!PataDeTansferencia methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:40:30'!
+esContraparte: unPosibleContraparteDeTransferencia
+	^contraparte = unPosibleContraparteDeTransferencia ! !
+
+!PataDeTansferencia methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:41:27'!
+initializeFor: aValue
+
+	value := aValue ! !
+
+!PataDeTansferencia methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:41:55'!
+value
+
+	^ value! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'PataDeTansferencia class' category: 'ServiciosFinancieros-Ejercicio'!
+PataDeTansferencia class
+	instanceVariableNames: ''!
+
+!PataDeTansferencia class methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:44:54'!
+register: aValue on: account
+
+	| transaction |
+	
+	transaction := self for: aValue.
+	account register: transaction.
+		
+	^ transaction! !
+
+
+!classDefinition: #DepositoDeTransfer category: 'ServiciosFinancieros-Ejercicio'!
+PataDeTansferencia subclass: #DepositoDeTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!DepositoDeTransfer methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:42:18'!
+valueForBalance
+
+	^ self value! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'DepositoDeTransfer class' category: 'ServiciosFinancieros-Ejercicio'!
+DepositoDeTransfer class
+	instanceVariableNames: ''!
+
+!DepositoDeTransfer class methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:44:16'!
+for: aValue
+
+	^ self new initializeFor: aValue ! !
+
+
+!classDefinition: #WithdrawDeTransfer category: 'ServiciosFinancieros-Ejercicio'!
+PataDeTansferencia subclass: #WithdrawDeTransfer
+	instanceVariableNames: ''
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!WithdrawDeTransfer methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:42:45'!
+valueForBalance
+
+	^ value negated! !
+
+"-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
+
+!classDefinition: 'WithdrawDeTransfer class' category: 'ServiciosFinancieros-Ejercicio'!
+WithdrawDeTransfer class
+	instanceVariableNames: ''!
+
+!WithdrawDeTransfer class methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:44:24'!
+for: aValue
+
+	^ self new initializeFor: aValue ! !
+
+
+!classDefinition: #Portfolio category: 'ServiciosFinancieros-Ejercicio'!
+Object subclass: #Portfolio
+	instanceVariableNames: 'cuentas'
+	classVariableNames: ''
+	poolDictionaries: ''
+	category: 'ServiciosFinancieros-Ejercicio'!
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:51:47'!
+add: unaCuenta
+
+	cuentas add: unaCuenta ! !
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:56:47'!
+balance
+	^cuentas sum: [ :unaCuenta | unaCuenta balance ] ifEmpty: [ 0 ]! !
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 21:16:02'!
+hasRegistered: unaTransferencia 
+	^ cuentas  anySatisfy: [:unaCuenta | unaCuenta hasRegistered: unaTransferencia]! !
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:52:47'!
+initialize
+
+	cuentas := Set new
+	! !
+
+!Portfolio methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 21:29:34'!
+transaccionesDeLaCuenta: unaCuenta
+
+	^unaCuenta transactions.! !
 
 
 !classDefinition: #ReceptiveAccount category: 'ServiciosFinancieros-Ejercicio'!
@@ -337,10 +510,10 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 'i 11/6/2022 21:04:23'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'i 11/8/2022 19:50:58'!
 balance
 
-	^transactions sum: [ :aTransaction | aTransaction valueForBalanceEnLaCuenta: self ] ifEmpty: [ 0 ]! !
+	^transactions sum: [ :aTransaction | aTransaction valueForBalance ] ifEmpty: [ 0 ]! !
 
 !ReceptiveAccount methodsFor: 'main protocol' stamp: 'NR 10/17/2019 03:28:43'!
 hasRegistered: aTransaction
@@ -359,23 +532,20 @@ transactions
 
 	^ transactions copy! !
 
-
 
 !classDefinition: #Transferencia category: 'ServiciosFinancieros-Ejercicio'!
 Object subclass: #Transferencia
-	instanceVariableNames: 'value cuentaQueTransfiere cuentaQueRecibe pataDeDeposito pataDeWithdraw'
+	instanceVariableNames: 'value pataDeDeposito pataDeWithdraw'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:41:37'!
+!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:43:10'!
 initializeFor: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
 
 	value := unMonto.
-	cuentaQueTransfiere := unaCuentaQueTransfiere .
-	cuentaQueRecibe := unaCuentaQueRecibe .
-	pataDeDeposito := DepositoDeTransferencia register: unMonto on: unaCuentaQueRecibe .
-	pataDeWithdraw := WithdrawDeTransferencia register: unMonto on: unaCuentaQueTransfiere .
+	pataDeDeposito := DepositoDeTransfer register: unMonto on: unaCuentaQueRecibe .
+	pataDeWithdraw := WithdrawDeTransfer register: unMonto on: unaCuentaQueTransfiere .
 	pataDeDeposito agregarContraparte: pataDeWithdraw.
 	pataDeWithdraw agregarContraparte: pataDeDeposito ! !
 
