@@ -5,30 +5,7 @@ TestCase subclass: #PortfolioTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 23:09:06'!
-atest06UnPortfolioNoPuedeAgregarDosVecesLaMismaCuenta
-
-	| portfolio1 cuenta1  |
-	
-	portfolio1 := Portfolio new.
-	cuenta1 := ReceptiveAccount new.
-	
-	Deposit register: 100*peso on: cuenta1 .
-		
-	portfolio1 add: cuenta1.
-	
-	self
-        should: [portfolio1 add: cuenta1]
-        raise: Error - MessageNotUnderstood 
-        withExceptionDo: [ :anError |
-            self assert: 'Un portfolio no puede agregar dos veces la misma cuenta.' equals: anError messageText ].
-	
-	
-		
-	
-	! !
-
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 01:37:49'!
+!PortfolioTest methodsFor: 'testing' stamp: 't 11/11/2022 01:37:49'!
 test01DepositamosEnUnaCuentaYElBalanceEsElBalanceDeLaCuenta
 
 	| portfolio unaCuenta |
@@ -43,7 +20,7 @@ test01DepositamosEnUnaCuentaYElBalanceEsElBalanceDeLaCuenta
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 01:39:05'!
+!PortfolioTest methodsFor: 'testing' stamp: 't 11/11/2022 01:39:05'!
 test02DepositamosEnDosCuentasYElBalanceEsElBalanceDeLaCuentasSumadas
 
 	| portfolio unaCuenta otraCuenta |
@@ -60,7 +37,7 @@ test02DepositamosEnDosCuentasYElBalanceEsElBalanceDeLaCuentasSumadas
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 01:40:26'!
+!PortfolioTest methodsFor: 'testing' stamp: 't 11/11/2022 01:40:26'!
 test03DepositamosEnUnaCuentaYSeRegistraLaTransaccion
 
 	| portfolio unaCuenta unDeposito |
@@ -74,7 +51,7 @@ test03DepositamosEnUnaCuentaYSeRegistraLaTransaccion
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 01:49:34'!
+!PortfolioTest methodsFor: 'testing' stamp: 't 11/11/2022 01:49:34'!
 test04LasTransaccionesDeUnaCuentaSonLasMismasQueLasDelPortfolio
 
 	| portfolio cuenta1 |
@@ -91,7 +68,7 @@ test04LasTransaccionesDeUnaCuentaSonLasMismasQueLasDelPortfolio
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 01:51:10'!
+!PortfolioTest methodsFor: 'testing' stamp: 't 11/11/2022 01:51:10'!
 test05ElBalanceConPortfoliosYCuentasAnidadasEsElCorrecto
 
 	| portfolio1 cuenta1 cuenta2 portfolio2 portfolio3 cuenta3 |
@@ -118,7 +95,7 @@ test05ElBalanceConPortfoliosYCuentasAnidadasEsElCorrecto
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 01:54:56'!
+!PortfolioTest methodsFor: 'testing' stamp: 'i 11/11/2022 09:39:21'!
 test06SeEncuentraElRegistroEntreCuentasYPortfoliosAnidados
 
 	| portfolio1 cuenta1 cuenta2 portfolio2 portfolio3 cuenta3 unDeposito |
@@ -145,7 +122,7 @@ test06SeEncuentraElRegistroEntreCuentasYPortfoliosAnidados
 	
 	! !
 
-!PortfolioTest methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 01:56:59'!
+!PortfolioTest methodsFor: 'testing' stamp: 'i 11/11/2022 16:33:19'!
 test07LasTransaccionesDelPortfolioSonLasEsperadasLuegoDeAnidarCuentasYPortfolios
 
 	| portfolio1 cuenta1 cuenta2 portfolio2 portfolio3 cuenta3 depositos |
@@ -159,19 +136,81 @@ test07LasTransaccionesDelPortfolioSonLasEsperadasLuegoDeAnidarCuentasYPortfolios
 	cuenta1 := ReceptiveAccount new.
 	cuenta2 := ReceptiveAccount new.
 	cuenta3 := ReceptiveAccount new.
-	
 	depositos add: 	(Deposit register: 100*peso on: cuenta1).
 	depositos add: (	Deposit register: 50*peso on: cuenta2).
 	depositos add: (	Deposit register: 200*peso on: cuenta3).
-
 	portfolio1 add: cuenta1.
 	portfolio2 add: cuenta2.
 	portfolio3 add: cuenta3.
 	portfolio2 add: portfolio3 .
 	portfolio1 add: portfolio2 .
-			
 	self assert: (depositos = portfolio1 transactions ).
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'i 11/11/2022 15:46:29'!
+test08UnPortfolioNoPuedeAgregarDosVecesLaMismaCuenta
+
+	| portfolio1 cuenta1  |
 	
+	portfolio1 := Portfolio new.
+	
+	cuenta1 := ReceptiveAccount new.
+	
+	Deposit register: 100*peso on: cuenta1 .
+	
+	portfolio1 add: cuenta1.
+	
+	self
+	
+        should: [portfolio1 add: cuenta1]
+
+        raise: Error - MessageNotUnderstood 
+
+        withExceptionDo: [ :anError |
+	
+            self assert: 'Un portfolio no puede agregar dos veces la misma cuenta.' equals: anError messageText ].
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'i 11/11/2022 15:48:25'!
+test09UnPortfolioNoSePuedeIncluirASiMismo
+
+	| portfolio1  |
+	
+	portfolio1 := Portfolio new.
+
+	self
+	
+        should: [portfolio1 add: portfolio1]
+
+        raise: Error - MessageNotUnderstood 
+
+        withExceptionDo: [ :anError |
+	
+            self assert: 'Un portfolio no se puede incluir a si mismo.' equals: anError messageText ].
+	! !
+
+!PortfolioTest methodsFor: 'testing' stamp: 'i 11/11/2022 16:16:08'!
+test10NoSePuedeAgregarUnaCuentaQueYaEstaEnUnPortfolioHijo
+	
+	| portfolio1 portfolio2 cuenta1 |
+	
+	portfolio1 := Portfolio new.
+	portfolio2 := Portfolio new.
+	
+	cuenta1 := ReceptiveAccount new.
+	
+	portfolio2 add: cuenta1.
+	portfolio1 add: portfolio2.
+
+	self
+	
+        should: [portfolio1 add: cuenta1]
+
+        raise: Error - MessageNotUnderstood 
+
+        withExceptionDo: [ :anError |
+	
+            self assert: 'Un portfolio no puede agregar una cuenta que ya esta incluida en un portfolio hijo.' equals: anError messageText ].
 	! !
 
 
@@ -273,7 +312,7 @@ TestCase subclass: #TransferenciaTest
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:26:59'!
+!TransferenciaTest methodsFor: 'testing' stamp: 'i 11/7/2022 18:26:59'!
 test01LaCuentaALaCualSeLeTransfierePasaATenerElMonto 
 
 	| accountQueRecibePlata accountQueTransfierePlata |
@@ -287,7 +326,7 @@ test01LaCuentaALaCualSeLeTransfierePasaATenerElMonto
 	
 	self assert: 100 * peso equals: accountQueRecibePlata balance! !
 
-!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:27:18'!
+!TransferenciaTest methodsFor: 'testing' stamp: 'i 11/7/2022 18:27:18'!
 test02LaCuentaQueTransfiereDejaDeTenerElMonto 
 
 	| accountQueRecibePlata accountQueTransfierePlata |
@@ -301,7 +340,7 @@ test02LaCuentaQueTransfiereDejaDeTenerElMonto
 	
 	self assert: 0 * peso equals: accountQueTransfierePlata balance! !
 
-!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:27:56'!
+!TransferenciaTest methodsFor: 'testing' stamp: 'i 11/7/2022 18:27:56'!
 test03SeRegistraLaTransferenciaEnLasDosCuentas
 
 	| accountQueRecibePlata accountQueTransfierePlata transferencia |
@@ -316,7 +355,7 @@ test03SeRegistraLaTransferenciaEnLasDosCuentas
 	self assert: (accountQueRecibePlata hasRegistered: transferencia pataDeDeposit).
 	self assert: (accountQueTransfierePlata hasRegistered: transferencia pataDeWithdraw).! !
 
-!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:28:12'!
+!TransferenciaTest methodsFor: 'testing' stamp: 'i 11/7/2022 18:28:12'!
 test04LaTransferenciaConoceSuValor
 
 	| accountQueRecibePlata accountQueTransfierePlata transferencia |
@@ -330,7 +369,7 @@ test04LaTransferenciaConoceSuValor
 	
 	self assert: 100 * peso equals: transferencia value.! !
 
-!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:40:47'!
+!TransferenciaTest methodsFor: 'testing' stamp: 'i 11/7/2022 18:40:47'!
 test05LaPataDeWithdrawTieneComoContraparteALaPataDeDeposito
 
 	| accountQueRecibePlata accountQueTransfierePlata transferencia pataDeDeposito pataDeWithdraw |
@@ -347,7 +386,7 @@ test05LaPataDeWithdrawTieneComoContraparteALaPataDeDeposito
 	
 	self assert: (pataDeWithdraw esContraparte: pataDeDeposito).! !
 
-!TransferenciaTest methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:29:00'!
+!TransferenciaTest methodsFor: 'testing' stamp: 'i 11/7/2022 18:29:00'!
 test06LaPataDeDepositoTieneComoContraparteALaPataDeWithdraw
 
 	| accountQueRecibePlata accountQueTransfierePlata transferencia pataDeDeposit pataDeWithdraw |
@@ -372,7 +411,7 @@ Object subclass: #AccountTransaction
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!AccountTransaction methodsFor: 'value' stamp: 'HernanWilkinson 9/12/2011 12:25'!
+!AccountTransaction methodsFor: 'value' stamp: 'i 11/11/2022 09:52:36'!
 value 
 
 	self subclassResponsibility ! !
@@ -383,6 +422,10 @@ value
 AccountTransaction class
 	instanceVariableNames: ''!
 
+!AccountTransaction class methodsFor: 'instance creation' stamp: 'i 11/6/2022 20:29:31'!
+register: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
+	self subclassResponsibility ! !
+
 !AccountTransaction class methodsFor: 'instance creation' stamp: 'NR 10/17/2019 03:22:00'!
 register: aValue on: account
 
@@ -392,11 +435,6 @@ register: aValue on: account
 	account register: transaction.
 		
 	^ transaction! !
-
-
-!AccountTransaction class methodsFor: 'as yet unclassified' stamp: 'i 11/6/2022 20:29:31'!
-register: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
-	self subclassResponsibility ! !
 
 
 !classDefinition: #Deposit category: 'ServiciosFinancieros-Ejercicio'!
@@ -412,21 +450,15 @@ initializeFor: aValue
 	value := aValue ! !
 
 
-!Deposit methodsFor: 'value' stamp: 'HernanWilkinson 7/13/2011 18:38'!
+!Deposit methodsFor: 'value' stamp: 'i 11/11/2022 09:52:48'!
 value
 
 	^ value! !
 
-!Deposit methodsFor: 'value' stamp: 'i 11/8/2022 19:51:16'!
+!Deposit methodsFor: 'value' stamp: 'i 11/11/2022 09:52:53'!
 valueForBalance
 
 	^ self value! !
-
-
-!Deposit methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 00:07:05'!
-= otroDeposito
-
-	^value = otroDeposito value.! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -463,12 +495,6 @@ valueForBalance
 
 	^ value negated! !
 
-
-!Withdraw methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 00:07:28'!
-= otroWithdraw
-
-	^value = otroWithdraw value.! !
-
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
 !classDefinition: 'Withdraw class' category: 'ServiciosFinancieros-Ejercicio'!
@@ -488,29 +514,21 @@ Object subclass: #PataDeTransferencia
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!PataDeTransferencia methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 00:14:46'!
-= otraPataDeTransferencia
-
-	^ contraparte = otraPataDeTransferencia contraparte and: [value = otraPataDeTransferencia value].! !
-
-!PataDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:40:49'!
-agregarContraparte: unaContraparte
-	contraparte := unaContraparte ! !
-
-!PataDeTransferencia methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 00:13:57'!
-contraparte
-	^contraparte! !
-
-!PataDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:40:30'!
-esContraparte: unPosibleContraparteDeTransferencia
-	^contraparte = unPosibleContraparteDeTransferencia ! !
-
-!PataDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:41:27'!
+!PataDeTransferencia methodsFor: 'initialize' stamp: 'i 11/8/2022 20:41:27'!
 initializeFor: aValue
 
 	value := aValue ! !
 
-!PataDeTransferencia methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:41:55'!
+
+!PataDeTransferencia methodsFor: 'operaciones' stamp: 'i 11/8/2022 20:40:49'!
+agregarContraparte: unaContraparte
+	contraparte := unaContraparte ! !
+
+!PataDeTransferencia methodsFor: 'operaciones' stamp: 'i 11/8/2022 20:40:30'!
+esContraparte: unPosibleContraparteDeTransferencia
+	^contraparte = unPosibleContraparteDeTransferencia ! !
+
+!PataDeTransferencia methodsFor: 'operaciones' stamp: 'i 11/8/2022 20:41:55'!
 value
 
 	^ value! !
@@ -521,7 +539,7 @@ value
 PataDeTransferencia class
 	instanceVariableNames: ''!
 
-!PataDeTransferencia class methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:44:54'!
+!PataDeTransferencia class methodsFor: 'instance creation' stamp: 'i 11/8/2022 20:44:54'!
 register: aValue on: account
 
 	| transaction |
@@ -539,7 +557,7 @@ PataDeTransferencia subclass: #DepositoDeTransfer
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!DepositoDeTransfer methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:42:18'!
+!DepositoDeTransfer methodsFor: 'value' stamp: 'i 11/8/2022 20:42:18'!
 valueForBalance
 
 	^ self value! !
@@ -550,7 +568,7 @@ valueForBalance
 DepositoDeTransfer class
 	instanceVariableNames: ''!
 
-!DepositoDeTransfer class methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:44:16'!
+!DepositoDeTransfer class methodsFor: 'instance creation' stamp: 'i 11/8/2022 20:44:16'!
 for: aValue
 
 	^ self new initializeFor: aValue ! !
@@ -563,7 +581,7 @@ PataDeTransferencia subclass: #WithdrawDeTransfer
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!WithdrawDeTransfer methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:42:45'!
+!WithdrawDeTransfer methodsFor: 'value' stamp: 'i 11/8/2022 20:42:45'!
 valueForBalance
 
 	^ value negated! !
@@ -574,7 +592,7 @@ valueForBalance
 WithdrawDeTransfer class
 	instanceVariableNames: ''!
 
-!WithdrawDeTransfer class methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:44:24'!
+!WithdrawDeTransfer class methodsFor: 'instance creation' stamp: 'i 11/8/2022 20:44:24'!
 for: aValue
 
 	^ self new initializeFor: aValue ! !
@@ -582,67 +600,27 @@ for: aValue
 
 !classDefinition: #Portfolio category: 'ServiciosFinancieros-Ejercicio'!
 Object subclass: #Portfolio
-	instanceVariableNames: 'cuentasYPortfolios cuentas portfolios transaccionADevolver'
+	instanceVariableNames: 'cuentasYPortfolios'
 	classVariableNames: ''
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 22:59:53'!
-accountAlreadyExistsInPortfolio: unaCuenta! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 23:29:37'!
+!Portfolio methodsFor: 'public' stamp: 'i 11/11/2022 17:09:44'!
 add: elementoDelPortfolio
+
+	self elementoEsValido: elementoDelPortfolio.
 	
-	"(self accountAlreadyExistsInPortfolio: unaCuenta) ifTrue:[ self signalAccountAlreadyExistsInPortfolio  ]."
-	
-	elementoDelPortfolio agregarA: self.
-	
-	"cuentasYPortfolios add: elementoDelPortfolio"! !
+	cuentasYPortfolios add: elementoDelPortfolio! !
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 23:34:18'!
-agregarA: unPortfolio
-
-	unPortfolio agregarUnPortfolio: self.! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 23:31:31'!
-agregarCuenta: unaCuenta
-
-	cuentas add: unaCuenta.
-	cuentasYPortfolios add: unaCuenta.! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 23:35:13'!
-agregarUnPortfolio: unPortfolio
-
-	portfolios add: unPortfolio.
-	cuentasYPortfolios add: unPortfolio. ! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 23:24:18'!
+!Portfolio methodsFor: 'public' stamp: 't 11/10/2022 23:24:18'!
 balance
 	^cuentasYPortfolios sum: [ :unaCuenta | unaCuenta balance ] ifEmpty: [ 0 ]! !
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 23:24:18'!
+!Portfolio methodsFor: 'public' stamp: 't 11/10/2022 23:24:18'!
 hasRegistered: unaTransferencia 
 	^ cuentasYPortfolios  anySatisfy: [:unaCuenta | unaCuenta hasRegistered: unaTransferencia]! !
 
-!Portfolio methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 23:38:34'!
-initialize
-
-	cuentasYPortfolios := OrderedCollection new.
-	cuentas := OrderedCollection new.
-	portfolios := OrderedCollection new.
-	! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 00:59:08'!
-pertenece: unaCuenta
-
-	^cuentas anySatisfy: [:cuentaActual | cuentaActual = unaCuenta]! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 22:33:58'!
-signalAccountAlreadyExistsInPortfolio
-
-	self error: self class AccountAlreadyExistsInPortfolioErrorMessage! !
-
-!Portfolio methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 01:34:06'!
+!Portfolio methodsFor: 'public' stamp: 'i 11/11/2022 17:09:52'!
 transactions
 
 	| transactions |
@@ -653,14 +631,56 @@ transactions
 	
 	^transactions 
 
-
-	"^ cuentasYPortfolios collect: [:cuenta | cuenta transactions]."
-	
-		
-	
-	
-	
 ! !
+
+
+!Portfolio methodsFor: 'private' stamp: 'i 11/11/2022 15:46:02'!
+cuentaEstaIncluidaEnElPortfolio: unaCuenta
+	^ cuentasYPortfolios includes: unaCuenta! !
+
+!Portfolio methodsFor: 'private' stamp: 'i 11/11/2022 16:38:42'!
+cuentaIncluidaEnAlgunPortfolio: elementoDelPortfolio
+
+	(self cuentaEstaIncluidaEnElPortfolio: elementoDelPortfolio) ifTrue: [^true].
+
+	^ cuentasYPortfolios anySatisfy: [:elementoActualDePortfolio | elementoActualDePortfolio cuentaIncluidaEnAlgunPortfolio: elementoDelPortfolio ].
+
+	! !
+
+!Portfolio methodsFor: 'private' stamp: 'i 11/11/2022 17:02:16'!
+elementoEsValido: elementoDelPortfolio
+
+	(self cuentaEstaIncluidaEnElPortfolio: elementoDelPortfolio) ifTrue:[ self signalCuentaYaExisteEnElPortfolio  ].
+	(self esElPropioPortfolio: elementoDelPortfolio ) ifTrue:[ self signalNoSePuedeIncluirASiMismo ].
+	(self cuentaIncluidaEnAlgunPortfolio: elementoDelPortfolio) ifTrue:[ self signalNoPuedeIncluirUnaCuentaQueEsteEnAlgunPortfolioHijo ].
+	! !
+
+!Portfolio methodsFor: 'private' stamp: 'i 11/11/2022 15:54:04'!
+esElPropioPortfolio: unPortfolio
+	^ unPortfolio = self! !
+
+
+!Portfolio methodsFor: 'signals' stamp: 'i 11/11/2022 15:45:18'!
+signalCuentaYaExisteEnElPortfolio
+
+	self error: self class cuentaYaExisteEnElPortfolioMensajeDeError! !
+
+!Portfolio methodsFor: 'signals' stamp: 'i 11/11/2022 16:31:54'!
+signalNoPuedeIncluirUnaCuentaQueEsteEnAlgunPortfolioHijo
+
+	self error: self class portfolioNoPuedeIncluirCuentaQueEsteEnPortfolioHijo! !
+
+!Portfolio methodsFor: 'signals' stamp: 'i 11/11/2022 15:54:55'!
+signalNoSePuedeIncluirASiMismo
+
+	self error: self class portfolioNoSePuedeIncluirASiMismoMensajeDeError! !
+
+
+!Portfolio methodsFor: 'initialize' stamp: 'i 11/11/2022 17:09:37'!
+initialize
+
+	cuentasYPortfolios := OrderedCollection new.
+	! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -668,10 +688,20 @@ transactions
 Portfolio class
 	instanceVariableNames: ''!
 
-!Portfolio class methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 22:35:07'!
-AccountAlreadyExistsInPortfolioErrorMessage
+!Portfolio class methodsFor: 'errores' stamp: 'i 11/11/2022 15:58:06'!
+cuentaYaExisteEnElPortfolioMensajeDeError
 
-	^'Account Already Exists'! !
+	^'Un portfolio no puede agregar dos veces la misma cuenta.'! !
+
+!Portfolio class methodsFor: 'errores' stamp: 'i 11/11/2022 16:32:50'!
+portfolioNoPuedeIncluirCuentaQueEsteEnPortfolioHijo
+
+	^ 'Un portfolio no puede agregar una cuenta que ya esta incluida en un portfolio hijo.'! !
+
+!Portfolio class methodsFor: 'errores' stamp: 'i 11/11/2022 15:55:29'!
+portfolioNoSePuedeIncluirASiMismoMensajeDeError
+
+	^'Un portfolio no se puede incluir a si mismo.'! !
 
 
 !classDefinition: #ReceptiveAccount category: 'ServiciosFinancieros-Ejercicio'!
@@ -710,17 +740,9 @@ transactions
 	^ transactions copy! !
 
 
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 00:03:43'!
-= unaCuenta
-
-	^(transactions = unaCuenta transactions)
-
-	! !
-
-!ReceptiveAccount methodsFor: 'as yet unclassified' stamp: 't 11/10/2022 23:30:20'!
-agregarA: unPortfolio
-
-	unPortfolio agregarCuenta: self! !
+!ReceptiveAccount methodsFor: 'private' stamp: 'i 11/11/2022 16:34:43'!
+cuentaIncluidaEnAlgunPortfolio: elementoDelPortfolio
+	^false! !
 
 
 !classDefinition: #Transferencia category: 'ServiciosFinancieros-Ejercicio'!
@@ -730,12 +752,7 @@ Object subclass: #Transferencia
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Ejercicio'!
 
-!Transferencia methodsFor: 'as yet unclassified' stamp: 't 11/11/2022 00:10:31'!
-= otraTransferencia
-
-	^value  = otraTransferencia value and: [(pataDeDeposito = otraTransferencia pataDeDeposit) and: [pataDeWithdraw = otraTransferencia pataDeWithdraw] ].! !
-
-!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/8/2022 20:43:10'!
+!Transferencia methodsFor: 'initialize' stamp: 'i 11/11/2022 09:49:47'!
 initializeFor: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
 
 	value := unMonto.
@@ -744,18 +761,20 @@ initializeFor: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
 	pataDeDeposito agregarContraparte: pataDeWithdraw.
 	pataDeWithdraw agregarContraparte: pataDeDeposito ! !
 
-!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 17:50:23'!
-pataDeDeposit
-	^ pataDeDeposito! !
 
-!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 17:51:07'!
-pataDeWithdraw
-	^ pataDeWithdraw! !
-
-!Transferencia methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 15:59:10'!
+!Transferencia methodsFor: 'value' stamp: 'i 11/7/2022 15:59:10'!
 value
 
 	^ value! !
+
+
+!Transferencia methodsFor: 'patas de transferencia' stamp: 'i 11/7/2022 17:50:23'!
+pataDeDeposit
+	^ pataDeDeposito! !
+
+!Transferencia methodsFor: 'patas de transferencia' stamp: 'i 11/7/2022 17:51:07'!
+pataDeWithdraw
+	^ pataDeWithdraw! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -763,7 +782,7 @@ value
 Transferencia class
 	instanceVariableNames: ''!
 
-!Transferencia class methodsFor: 'as yet unclassified' stamp: 'i 11/7/2022 18:17:10'!
+!Transferencia class methodsFor: 'instance creation' stamp: 'i 11/7/2022 18:17:10'!
 register: unMonto desde: unaCuentaQueTransfiere hacia: unaCuentaQueRecibe
 	
 	| transaction |
