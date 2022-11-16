@@ -769,7 +769,7 @@ initialize
 	transactions := OrderedCollection new.! !
 
 
-!ReceptiveAccount methodsFor: 'main protocol' stamp: 't 11/13/2022 17:29:21'!
+!ReceptiveAccount methodsFor: 'main protocol' stamp: 'i 11/16/2022 17:43:10'!
 balance
 
 	^transactions 
@@ -818,7 +818,7 @@ Object subclass: #AccountTransaction
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!AccountTransaction methodsFor: 'value' stamp: 'HernanWilkinson 9/12/2011 12:25'!
+!AccountTransaction methodsFor: 'value' stamp: 'i 11/16/2022 18:33:06'!
 value 
 
 	self subclassResponsibility ! !
@@ -829,9 +829,14 @@ affectBalance: aBalance
 
 	self subclassResponsibility ! !
 
+!AccountTransaction methodsFor: 'balance' stamp: 'i 11/16/2022 18:37:24'!
+valueForBalance
 
-!AccountTransaction methodsFor: 'as yet unclassified' stamp: 'i 11/15/2022 21:10:04'!
-lineaDeDescripcionPara: unAccountSummary
+	self subclassResponsibility ! !
+
+
+!AccountTransaction methodsFor: 'add to report' stamp: 'i 11/16/2022 17:27:11'!
+addToReport: unReport
 
 	self subclassResponsibility ! !
 
@@ -855,16 +860,21 @@ value
 	^ value! !
 
 
-!Deposit methodsFor: 'balance' stamp: 'HAW 5/25/2019 11:25:02'!
+!Deposit methodsFor: 'balance' stamp: 'i 11/16/2022 17:41:35'!
 affectBalance: aBalance
 
 	^aBalance + value ! !
 
+!Deposit methodsFor: 'balance' stamp: 'i 11/16/2022 18:37:46'!
+valueForBalance
 
-!Deposit methodsFor: 'as yet unclassified' stamp: 'i 11/15/2022 21:09:45'!
-lineaDeDescripcionPara: unAccountSummary
+	^ value! !
 
-	^unAccountSummary descripcionDelDeposito: self.! !
+
+!Deposit methodsFor: 'add to report' stamp: 'i 11/16/2022 17:27:46'!
+addToReport: unReport
+
+	^unReport addDeposit: self! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -896,10 +906,15 @@ AccountTransaction subclass: #TransferLeg
 	poolDictionaries: ''
 	category: 'ServiciosFinancieros-Solucion'!
 
-!TransferLeg methodsFor: 'value' stamp: 'LL 9/20/2020 22:27:32'!
+!TransferLeg methodsFor: 'value' stamp: 'i 11/16/2022 17:44:59'!
 value
 
 	^transfer value! !
+
+!TransferLeg methodsFor: 'value' stamp: 'i 11/16/2022 18:38:13'!
+valueForBalance
+
+	self subclassResponsibility ! !
 
 
 !TransferLeg methodsFor: 'initialization' stamp: 't 11/13/2022 18:17:35'!
@@ -908,8 +923,8 @@ initializeWith: aTransfer
 	transfer := aTransfer! !
 
 
-!TransferLeg methodsFor: 'as yet unclassified' stamp: 'i 11/15/2022 21:10:08'!
-lineaDeDescripcionPara: unAccountSummary
+!TransferLeg methodsFor: 'add to report' stamp: 'i 11/16/2022 17:28:05'!
+addToReport: unReport
 
 	self subclassResponsibility ! !
 
@@ -948,11 +963,16 @@ affectBalance: aBalance
 
 	^aBalance + self value! !
 
+!TransferDepositLeg methodsFor: 'balance' stamp: 'i 11/16/2022 18:38:27'!
+valueForBalance
 
-!TransferDepositLeg methodsFor: 'as yet unclassified' stamp: 'i 11/15/2022 21:10:13'!
-lineaDeDescripcionPara: unAccountSummary
+	^transfer value! !
 
-	^unAccountSummary descripcionDelDepositoDeTransferencia: self.! !
+
+!TransferDepositLeg methodsFor: 'add to report' stamp: 'i 11/16/2022 17:28:25'!
+addToReport: unReport
+
+	^unReport addTransferDeposit: self! !
 
 
 !classDefinition: #TransferWithdrawLeg category: 'ServiciosFinancieros-Solucion'!
@@ -973,11 +993,16 @@ affectBalance: aBalance
 
 	^aBalance - self value! !
 
+!TransferWithdrawLeg methodsFor: 'balance' stamp: 'i 11/16/2022 18:38:37'!
+valueForBalance
 
-!TransferWithdrawLeg methodsFor: 'as yet unclassified' stamp: 'i 11/15/2022 21:10:19'!
-lineaDeDescripcionPara: unAccountSummary
+	^transfer value negated! !
 
-	^unAccountSummary descripcionDelWithdrawDeTransferencia: self.! !
+
+!TransferWithdrawLeg methodsFor: 'add to report' stamp: 'i 11/16/2022 17:28:43'!
+addToReport: unReport
+
+	^unReport addTransferWithdraw: self! !
 
 
 !classDefinition: #Withdraw category: 'ServiciosFinancieros-Solucion'!
@@ -999,16 +1024,21 @@ value
 	^ value! !
 
 
-!Withdraw methodsFor: 'balance' stamp: 'HAW 5/25/2019 11:25:15'!
+!Withdraw methodsFor: 'balance' stamp: 'i 11/16/2022 18:27:10'!
 affectBalance: aBalance
 
 	^aBalance - value! !
 
+!Withdraw methodsFor: 'balance' stamp: 'i 11/16/2022 18:38:56'!
+valueForBalance
 
-!Withdraw methodsFor: 'as yet unclassified' stamp: 'i 11/15/2022 21:10:24'!
-lineaDeDescripcionPara: unAccountSummary
+	^value negated! !
 
-	^unAccountSummary descripcionDelWithdraw: self.! !
+
+!Withdraw methodsFor: 'add to report' stamp: 'i 11/16/2022 17:28:57'!
+addToReport: unReport
+
+	^unReport addWithdraw: self! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
@@ -1076,7 +1106,7 @@ initializeWith: transaccionesDeUnaCuenta and: balanceDeUnaCuenta
 	balance := balanceDeUnaCuenta! !
 
 
-!AccountSummary methodsFor: 'main protocol' stamp: 'i 11/15/2022 21:36:34'!
+!AccountSummary methodsFor: 'main protocol' stamp: 'i 11/16/2022 17:32:04'!
 summary
 	| resumen |
 	
@@ -1091,34 +1121,34 @@ summary
 	^resumen! !
 
 
+!AccountSummary methodsFor: 'private' stamp: 'i 11/16/2022 17:30:21'!
+addDeposit: unDeposito
+
+	^'Deposito por ',unDeposito value asString! !
+
+!AccountSummary methodsFor: 'private' stamp: 'i 11/16/2022 17:30:37'!
+addTransferDeposit: unDepositoDeTransferencia
+
+	^'Entrada por transferencia de ',unDepositoDeTransferencia value asString! !
+
+!AccountSummary methodsFor: 'private' stamp: 'i 11/16/2022 17:30:51'!
+addTransferWithdraw: unWithdrawDeTransferencia
+
+	^'Salida por transferencia de ', unWithdrawDeTransferencia value asString! !
+
+!AccountSummary methodsFor: 'private' stamp: 'i 11/16/2022 17:29:22'!
+addWithdraw: unWithdraw
+
+	^'Extraccion por ',unWithdraw value asString! !
+
 !AccountSummary methodsFor: 'private' stamp: 'i 11/15/2022 21:14:13'!
 balanceDeLaCuenta
 
 	^'Balance = ', cuenta balance asString! !
 
-!AccountSummary methodsFor: 'private' stamp: 'i 11/15/2022 21:05:18'!
-descripcionDelDeposito: unDeposito
-
-	^'Deposito por ',unDeposito value asString! !
-
-!AccountSummary methodsFor: 'private' stamp: 'i 11/15/2022 21:07:13'!
-descripcionDelDepositoDeTransferencia: unDepositoDeTransferencia
-
-	^'Entrada por transferencia de ',unDepositoDeTransferencia value asString! !
-
-!AccountSummary methodsFor: 'private' stamp: 'i 11/15/2022 21:06:00'!
-descripcionDelWithdraw: unWithdraw
-
-	^'Extraccion por ',unWithdraw value asString! !
-
-!AccountSummary methodsFor: 'private' stamp: 'i 11/15/2022 21:06:38'!
-descripcionDelWithdrawDeTransferencia: unWithdrawDeTransferencia
-
-	^'Salida por transferencia de ', unWithdrawDeTransferencia value asString! !
-
-!AccountSummary methodsFor: 'private' stamp: 'i 11/15/2022 21:01:28'!
+!AccountSummary methodsFor: 'private' stamp: 'i 11/16/2022 17:26:48'!
 lineaDelResumenSegun: unaTransaccion
-	^unaTransaccion lineaDeDescripcionPara: self.
+	^unaTransaccion addToReport: self.
 
 	
 ! !
@@ -1148,18 +1178,38 @@ initializeWith: unaCuenta
 	cuenta := unaCuenta.! !
 
 
-!TransferNet methodsFor: 'main protocol' stamp: 'i 11/16/2022 14:47:03'!
+!TransferNet methodsFor: 'main protocol' stamp: 'i 11/16/2022 18:40:37'!
 summary
-
-	^cuenta transactions
-			inject: 0*peso
-			into: [:currentBalance :unaTransaccion |  ( self esParteDeUnaTransferencia: unaTransaccion) ifTrue: [ unaTransaccion affectBalance: currentBalance] ifFalse: [currentBalance]].	! !
+			
+	^cuenta transactions sum: [ :aTransaction | self valueForReport: aTransaction ] ifEmpty: [ 0 ]! !
 
 
-!TransferNet methodsFor: 'private' stamp: 'i 11/15/2022 21:08:22'!
+!TransferNet methodsFor: 'private' stamp: 'i 11/16/2022 18:39:46'!
+addDeposit: unDeposito
+	^0*peso! !
+
+!TransferNet methodsFor: 'private' stamp: 'i 11/16/2022 18:39:59'!
+addTransferDeposit: unDepositoDeTransferencia
+	^ unDepositoDeTransferencia valueForBalance ! !
+
+!TransferNet methodsFor: 'private' stamp: 'i 11/16/2022 18:40:08'!
+addTransferWithdraw: unWithdrawDeTransferencia
+	^unWithdrawDeTransferencia valueForBalance ! !
+
+!TransferNet methodsFor: 'private' stamp: 'i 11/16/2022 18:40:16'!
+addWithdraw: unWithdraw
+	^0*peso
+! !
+
+!TransferNet methodsFor: 'private' stamp: 'i 11/16/2022 17:36:41'!
 esParteDeUnaTransferencia: unaTransaccion
 
-	^(unaTransaccion isKindOf: TransferDepositLeg) or: [unaTransaccion isKindOf: TransferWithdrawLeg]! !
+	^unaTransaccion addToReport: self! !
+
+!TransferNet methodsFor: 'private' stamp: 'i 11/16/2022 18:05:51'!
+valueForReport: unaTransaccion
+
+	^unaTransaccion addToReport: self! !
 
 "-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- "!
 
